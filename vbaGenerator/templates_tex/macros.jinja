@@ -1,0 +1,171 @@
+{% macro generieretabelle(tabelle, spaltentitel) -%}
+\begin{center}\sffamily
+\begin{tikzpicture}
+    \node[scale=0.9] at (0,0) {
+    \begin{tikzpicture}[yscale=0.5,xscale=2.5]
+
+    \fill[black!4] (0,1) rectangle ({{ spaltentitel | length }},0);
+    \fill[black!4] (-.25,1) rectangle (0,-{{ tabelle | length + 1 }});
+
+    {% for titel in spaltentitel %}
+    \node[scale=0.7] at ({{ 0.5 + loop.index0 }}, 0.5) { {{ "ABCDEFGHIJK"[loop.index0]}} };
+    \node[scale=0.7] at ({{ 0.5 + loop.index0 }}, -0.5) { {{ titel }} };
+    {% endfor %}
+
+    {% for zeile in tabelle %}
+        {% set outer_loop = loop %}
+    \node[scale=0.7] at (-0.125,{{ -0.5 - loop.index }} ) { {{ loop.index + 1 }} };
+        {% for spalte in zeile %}
+    \node[scale=0.7] at ({{ 0.5 + loop.index0 }}, {{ -1.5 - outer_loop.index0 }}) { {{ spalte }} };
+        {% endfor %}
+
+    {% endfor %}
+    \node[scale=0.7] at (-0.125,-0.5) {1};
+
+    \draw[black!20] (0,1) grid ({{ spaltentitel | length }},{{ - (tabelle | length + 1) }});
+    \draw[black!20,xstep=0.25] (-0.25,1) grid (0, {{ -(tabelle | length + 1) }});
+    \fill[black!15] (-0.2125,0.05) -- (-0.01375,0.05) -- (-.01375,0.9) -- (-0.25,0.05);
+
+\end{tikzpicture}
+};
+\end{tikzpicture}
+\end{center}
+{%- endmacro %}
+
+{% macro generiereauswahl(text, auswahlliste) -%}
+    \begin{itemize}
+        {% for auswahl in auswahlliste %}
+            \item {{ text.format(**auswahl) }}
+        {% endfor %}
+    \end{itemize}
+{%- endmacro %}
+{% macro generieretextliste(liste) -%}
+    \begin{itemize}
+        {% for text in liste %}
+                \item {{ text }}
+        {% endfor %}
+    \end{itemize}
+{%- endmacro %}
+
+{% macro generierestatistikausgabe(tabelle) -%}
+\begin{center}\sffamily
+\begin{tikzpicture}
+    \node[scale=0.9] at (0,0) {
+    \begin{tikzpicture}[yscale=0.5,xscale=2.5]
+
+    \fill[black!4] (0,1) rectangle (5,0);
+    \fill[black!4] (-.25,1) rectangle (0,{{ -(tabelle | length) }});
+
+    \node[scale=0.7] at (2, 0.5) { A };
+    \node[scale=0.7] at (4.5, 0.5) { B };
+
+    {% for (text, wert) in tabelle %}
+    \node[scale=0.7] at (-0.125, {{ -0.5 - loop.index0 }} ) { {{ loop.index }} };
+    \node[scale=0.7] at (2, {{ -0.5 - loop.index0 }} ) { {{ text }} };
+    \node[scale=0.7] at (4.5, {{ -0.5 - loop.index0 }} ) { {{ wert }} };
+    {% endfor %}
+
+    \draw[black!20,xstep=4] (0,1) grid (4,-{{ tabelle | length }});
+    \draw[black!20] (4,1) grid (5, {{ -(tabelle | length) }});
+    \draw[black!20,xstep=0.25] (-0.25,1) grid (0, {{ -(tabelle | length) }});
+    \fill[black!15] (-0.2125,0.05) -- (-0.01375,0.05) -- (-.01375,0.9) -- (-0.25,0.05);
+
+\end{tikzpicture}
+};
+\end{tikzpicture}
+\end{center}
+{%- endmacro %}
+
+{% macro generiere_farbauswahl(auswahlliste) -%}
+    \begin{itemize}
+        {% for (bedingung, farbe) in auswahlliste %}
+            \item {{ bedingung }}: es wird die Farbe {{ farbe }} verwendet.
+        {% endfor %}
+    \end{itemize}
+{%- endmacro %}
+
+{% macro generieretabelle_mit_formatierung(tabelle, spaltentitel, formatierungen) -%}
+\begin{center}\sffamily
+    \begin{tikzpicture}
+    \node[scale=0.9] at (0,0) {
+    \begin{tikzpicture}[yscale=0.5,xscale=2.5]
+
+    \fill[black!4] (0,1) rectangle ({{ spaltentitel | length }},0);
+    \fill[black!4] (-.25,1) rectangle (0,-{{ tabelle | length +1 }});
+
+    {% for titel in spaltentitel %}
+    \node[scale=0.7] at ({{ 0.5 + loop.index0 }}, 0.5) { {{ "ABCDEFGHIJK"[loop.index0]}} };
+    \node[scale=0.7] at ({{ 0.5 + loop.index0 }}, -0.5) { {{ titel }} };
+    {% endfor %}
+
+    {% for zeile in tabelle %}
+        {% set formatierung = formatierungen[loop.index0] %}
+        {% set hintergrundfarbe = '' %}
+        {% set schrift = '' %}
+        {% set textfarbe = '' %}
+        {% if formatierung.schrift == 'font-weight: bold' %}
+            {% set schrift = ",font=\\bfseries" %}
+        {% endif %}
+        {% if formatierung.schrift == 'font-style: italic' %}
+            {% set schrift = ",font=\\itshape" %}
+        {% endif %}
+        {% if formatierung.faerbung == 'color' %}
+            {% set textfarbe =   ("\\textcolor[RGB]{{{} {} {}}}{{".format(formatierung.farbe[0], formatierung.farbe[1], formatierung.farbe[2])) %}
+            {% set textfarbe_ende = '}' %}
+        {% endif %}
+        {% if formatierung.faerbung == 'background-color' %}
+            {% set farbe = ("rgb,255:red,{};green,{};blue,{}".format(formatierung.farbe[0], formatierung.farbe[1], formatierung.farbe[2])) %}
+    \fill[color={ {{ farbe }} }] (0, {{ -loop.index0 - 1 }}) rectangle ({{ zeile | length }}, {{ -loop.index0 - 2 }});
+         {% endif %}
+
+        {% set outer_loop = loop %}
+    \node[scale=0.7] at (-0.125,{{ -0.5 - loop.index }} ) { {{ loop.index + 1 }} };
+        {% for spalte in zeile %}
+    \node[scale=0.7{{schrift}}] at ({{ 0.5 + loop.index0 }}, {{ -1.5 - outer_loop.index0 }}) { {{ textfarbe }}{{ spalte }}{{ textfarbe_ende }} };
+        {% endfor %}
+
+    {% endfor %}
+    \node[scale=0.7] at (-0.125,-0.5) {1};
+
+    \draw[black!20] (0,1) grid ({{ spaltentitel | length }},{{ -(tabelle | length + 1) }});
+    \draw[black!20,xstep=0.25] (-0.25,1) grid (0, {{ -(tabelle | length + 1) }});
+    \fill[black!15] (-0.2125,0.05) -- (-0.01375,0.05) -- (-.01375,0.9) -- (-0.25,0.05);
+
+\end{tikzpicture}
+};
+\end{tikzpicture}
+\end{center}
+{%- endmacro %}
+
+
+{% macro generierefehlerausgabe(fehlerliste, ausgabezeile, ausgabespalte) -%}
+\begin{center}\sffamily
+\begin{tikzpicture}
+    \node[scale=0.9] at (0,0) {
+    \begin{tikzpicture}[yscale=0.5,xscale=2]
+
+    \fill[black!4] (0,1) rectangle ({{ ausgabespalte + 4 }},0);
+    \fill[black!4] (-.25,1) rectangle (0,{{ -(fehlerliste | length + ausgabezeile) }});
+    \fill[black!15] (-0.2125,0.05) -- (-0.01375,0.05) -- (-.01375,0.9) -- (-0.25,0.05);
+
+    \draw[black!20] (0,1) grid ({{ ausgabespalte - 1 }},{{ -(fehlerliste | length + ausgabezeile) }});
+    \draw[black!20,xstep=0.25] (-0.25,1) grid (0,-{{ fehlerliste | length + ausgabezeile }});
+    \draw[black!20,xstep={{ ausgabespalte + 4 }}] ({{ ausgabespalte - 1 }},1) grid ({{ ausgabespalte + 4 }},{{ -(fehlerliste | length + ausgabezeile) }});
+
+    {% for i in range(ausgabespalte - 1) %}
+    \node[scale=0.7] at ({{ 0.5 + i }}, 0.5) { {{ "ABCDEFGHI"[i] }} };
+    {% endfor %}
+    {% for i in range(fehlerliste | length + ausgabezeile ) %}
+    \node[scale=0.7] at ({{ -0.125 }}, {{ - 0.5 - i }}) { {{ i + 1 }} };
+    {% endfor %}
+
+    \node[scale=0.7] at ({{ 1.5 + ausgabespalte}}, 0.5) { {{ "ABCDEFGHI"[ausgabespalte-1] }} };
+    {% for text in fehlerliste %}
+    \node[scale=0.7] at ({{ 1.5 + ausgabespalte}}, {{ 0.5 - loop.index0 - ausgabezeile }} ) { {{ text }} };
+    {% endfor %}
+
+\end{tikzpicture}
+};
+\end{tikzpicture}
+\end{center}
+{%- endmacro %}

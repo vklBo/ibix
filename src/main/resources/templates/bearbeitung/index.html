@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Aufgabenblätter</title>
+	</head>
+	<body>
+
+		<div id="content">
+
+			<h1 class="my-4">Aufgabenblätter</h1>
+	
+			<table class="table table-striped my-4">
+				<tr>
+					<th>Nr</th>
+					<th>Name</th>
+					<th>Start</th>
+					<th>Ende</th>
+					<th colspan="2" style="text-align: center;">Bonuspunkte</th>
+					<th>Gelöst</th>
+					<th>Bearbeitung öffnen</th>
+					<th class="text-center">Neu</th>
+				</tr>
+				<th:block th:each="aufgabenblatt : ${aufgabenblaetter}">
+				<tr class="align-middle">
+					<td><span th:text="${aufgabenblatt.aufgabenblatt.nr}"></span></td>
+					<td><span th:text="${aufgabenblatt.aufgabenblatt.name}"></span></td>
+					<td><span th:text="${#temporals.format(aufgabenblatt.aufgabenblatt.start, 'dd.MM.yyyy HH:mm')}"
+						th:class="'text-' + (${aufgabenblatt.aufgabenblatt.isGestartet()} ? 'success' : 'danger') + '-emphasis'"
+						th:if="${aufgabenblatt.aufgabenblatt.start}"></span></td>
+					<td><span th:text="${#temporals.format(aufgabenblatt.aufgabenblatt.ende, 'dd.MM.yyyy HH:mm')}"
+						th:class="'text-' + (${aufgabenblatt.aufgabenblatt.isBeendet()} ? 'danger' : 'success') + '-emphasis'"
+						th:if="${aufgabenblatt.aufgabenblatt.ende}"></span></td>
+					<td style="text-align: right;">
+						<span th:text="${aufgabenblatt.bonuspunkte}"></span>
+						</td><td>
+						<button th:if="${aufgabenblatt.bonuspunktinfo != null}" type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" th:data-bs-target="${'#modal' + aufgabenblatt.aufgabenblatt.id}">
+							  <i class="bi-info-lg"></i>
+							</button>	
+							
+							<div th:if="${aufgabenblatt.bonuspunktinfo != null}" class="modal fade" th:id="${'modal' + aufgabenblatt.aufgabenblatt.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							  <div class="modal-dialog modal-dialog-scrollable modal-l">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <h5 class="modal-title" id="exampleModalLabel">Details zu Bonuspunkten</h5>
+							        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							      </div>
+							      <div class="modal-body">
+							      <div><p>Für die Bonuspunkte werden die Aufgabenblätter des aktuellen Semesters und des Vorsemesters herangezogen.</p><p>Es werden die Punkte aus dem am besten gelösten Aufgabenblatt verwendet.</p></div>
+							      <table class="table">
+							      	<tr><th>Nummer des Aufgabenblatts</th><td><span th:utext="${aufgabenblatt.bonuspunktinfo.aufgabenblattNr}"></span></td></tr>
+							      	<tr><th>Abgabezeitpunkt</th><td><span th:utext="${#temporals.format(aufgabenblatt.bonuspunktinfo.timestamp, 'dd.MM.yyyy HH:mm')}"></span></td></tr>
+							      	<tr><th>Semester</th><td><span th:utext="${aufgabenblatt.bonuspunktinfo.semester}"></span></td></tr>
+							      	<tr><th>Bonuspunkte</th><td><span th:utext="${aufgabenblatt.bonuspunktinfo.punkte}"></span></td></tr>
+							      	<tr><th>Aufgabenblatt öffnen (neues Fenster)</th><td><a class="btn btn-sm btn-warning" target="_blank" th:href="@{/bearbeitung/{id}(id=${aufgabenblatt.bonuspunktinfo.bearbeitungId})}">
+								<i class="bi-pencil"></i>
+							</a></td></tr>
+							      </table>
+							      </div>
+							      <div class="modal-footer">
+							        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							      </div>
+							    </div>
+							  </div>
+							</div>
+					</td>
+					<td>
+						<span th:if="${aufgabenblatt.prozent != null}" class="badge text-bg-secondary" th:style="${'background-color:rgba(60, 255, 90,' +  (aufgabenblatt.prozent + 20) / 120.0 + ')!important; color:black!important; width:53px;'}" th:text="${aufgabenblatt.prozent + '%'}"><span th:text="${aufgabenblatt.prozent + '%'}"></span></span>
+					</td>
+					<td>
+						<form class="form row" method="POST" action="#"
+							th:action="@{/bearbeitungOeffnen}"
+							th:if="!${aufgabenblatt.bearbeitungsliste == null || aufgabenblatt.bearbeitungsliste.isEmpty()}">
+							<div class="col-auto">
+								<select class="form-select form-select-sm" id="bearbeitungId" name="bearbeitungId">
+									<option
+										th:each="bearbeitung : ${aufgabenblatt.bearbeitungsliste}"
+										th:value="${bearbeitung.id}"
+										th:text="${#temporals.format(bearbeitung.ausgabe, 'dd.MM.yyyy HH:mm')}"></option>
+								</select>
+							</div>
+							<div class="col-auto">
+								<button class="btn btn-sm btn-warning" type="submit">
+									<i class="bi-pencil"></i>
+								</button>
+							</div>
+						</form>
+					</td>
+					<td class="text-center">
+						<a class="btn btn-sm btn-primary"
+								th:href="@{/bearbeitung/new/{id}(id=${aufgabenblatt.aufgabenblatt.id})}"
+								th:if="${aufgabenblatt.aufgabenblatt.isAktuell()}">
+							<i class="bi-plus"></i>
+						</a>
+					</td>
+				</tr>
+				</th:block>
+			</table>
+			
+		</div>
+	</body>
+</html>

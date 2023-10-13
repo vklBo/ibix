@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Spaltendefinitionen</title>
+	</head>
+	<body>
+		<div id="content">
+
+			<div class="my-4">
+				<h1>Spaltendefinitionen</h1>
+			</div>
+			
+			<div class="my-4">
+				<form class="form" action="#" th:action="@{/spaltendefinition}" method="get">
+					<input class="form-control" id="filtertext" type="text" size=30 th:value="${filtertext}" name="filtertext" />
+					<div class="mt-2">
+						<input class="btn btn-primary" type="submit" value="Filtern" />
+						<a class="btn btn-primary" th:href="@{/spaltendefinition?filtertext}">Alle anzeigen</a>
+					</div>
+				</form>
+			</div>
+			
+			<div class="my-4">
+				<table class="table table-sm table-striped">
+					<tr>
+						<th>Id</th>
+						<th>Titel</th>
+						<th>Name</th>
+						<th>Tags</th>
+						<th>Typ</th>
+						<th>Auswahl</th>
+						<th>Inhalt</th>
+						<th>Intervalle</th>
+						<th>Konfiguration</th>
+						<th class="text-center">Bearbeiten</th>
+						<th class="text-center">Kopieren</th>
+					</tr>
+					<tr class="align-middle" th:each="spalte : ${spaltendefinitionen}">
+						<td><span th:text="${spalte.id}"></span></td>
+						<td><span th:text="${spalte.titel}"></span></td>
+						<td><span th:text="${spalte.name}"></span></td>
+						<td>
+							<a class="badge bg-secondary text-decoration-none mx-1"
+								th:each="tag : ${spalte.getTags()}"
+								th:href="@{/spaltendefinition?filtertext={tag}(tag=${tag})}">
+								<span th:text="${tag}"></span>
+							</a>
+						</td>
+						<td><span th:text="${spalte.typ}"></span></td>
+						<td><span th:text="${spalte.auswahl}"></span></td>
+						<td><span th:text="${#strings.abbreviate(spalte.inhalt, 35)}"></span></td>
+						<td><span th:text="${spalte.intervalle}"></span></td>
+						<td><span th:text="${spalte.config}"></span></td>
+						<td class="text-center">
+							<a class="btn btn-sm btn-warning" th:href="@{/spaltendefinition/{id}(id=${spalte.id})}">
+								<i class="bi-pencil"></i>
+							</a>
+						</td>
+						<td class="text-center">
+							<a class="btn btn-sm btn-primary" th:href="@{/spaltendefinition/copy/{id}(id=${spalte.id})}">
+								<i class="bi-clipboard-plus"></i>
+							</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="my-4">
+				<a class="btn btn-primary" th:href="@{/spaltendefinition/new}">
+					<i class="bi-plus pe-2"></i>
+					Neue Spaltendefinition anlegen
+				</a>
+			</div>
+
+		</div>
+	</body>
+</html>
+

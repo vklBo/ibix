@@ -1,0 +1,46 @@
+{% if klausur %}
+    \aufgabe{Aufgabe 4 (VBA 20 Punkte)}
+{% else %}
+    \subsection*{Aufgabe: {{ aufgabenname }} -- Formatierungen }
+{% endif %}
+
+{% if formatierungtext %}
+\emph{ {{ formatierungtext }} }
+{% endif %}
+
+Programmieren Sie eine Prozedur ''\verb+{{ formatierungprozedurname }}()+'', mit der Sie Formatierungen durchführen.
+
+{% if 0 in formatierungstypen %}
+Abhängig vom/von der {{ formatierungsaufgaben.name }} soll die {{ formatierungsaufgaben.wasFaerben }} der Datensätze gesetzt werden.
+
+{{ my.generiere_farbauswahl(formatierungsaufgaben.farbauswahl) }}
+{% endif %} 
+
+{% if 1 in formatierungstypen %}
+{% if 0 in formatierungstypen %}
+Unabhängig davon wird bei Datensätzen mit {{ formatierungsaufgaben.bedingungFarbeSonderfall }} die Farbe {{ formatierungsaufgaben.farbeSonderfall }} verwendet.
+{% else %} 
+Bei Datensätzen mit {{ formatierungsaufgaben.bedingungFarbeSonderfall }} wird für die {{ formatierungsaufgaben.wasFaerbenSonderfall }} der Datensätze die Farbe {{ formatierungsaufgaben.farbeSonderfall }} verwendet.
+{% endif %} 
+{% endif %} 
+
+{% if 2 in formatierungstypen %}
+Datensätze mit {{ formatierungsaufgaben.bedingungSchrift }} werden mit {{ formatierungsaufgaben.wasSchrift }} Schrift dargestellt.
+{% endif %} 
+
+Gemäß diesen Anforderungen wird die Tabelle wie folgt formatiert:
+
+{{ my.generieretabelle_mit_formatierung(tabelle, spaltentitel, formatierungen) }}
+
+
+
+{% if klausur %}
+Die Ermittlung von Farbe und Schriftart muss in eigenen Funktionen erfolgen. Für die Berechnung der letzten Zeile und Spalte verwenden Sie Funktionen aus dem Modul Standardfunktionen.
+Die Schaltfläche zum Start des Formatierungsprogramms soll grundsätzlich in jedes Tabellenblatt einbaubar sein.
+{% else %}
+Die Ermittlung von Farbe und Schriftart muss in eigenen Funktionen erfolgen. 
+{% endif %}
+
+
+
+

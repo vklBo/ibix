@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Aufgabentemplate</title>
+	</head>
+	<body>
+
+		<div id="content">
+		
+			<div class="my-4">
+				<a class="btn btn-secondary" th:href="@{/aufgabentemplate}">
+					<i class="bi-box-arrow-left pe-2"></i>
+					Zurück zur Übersicht
+				</a>
+			</div>
+
+			<div class="my-4">
+				<h1>
+					Aufgabentemplate:
+					<span th:text="${template.name}"></span>
+				</h1>
+				<form class="form" action="#" method="post"
+					th:action="@{/aufgabentemplate/{id}(id=${template.id})}"
+					th:object="${template}">
+					<p>
+						<label class="form-label" for="id">Id</label>
+						<input class="form-control-plaintext" id="id" type="text" th:field="*{id}" readonly />
+					</p>
+					<p>
+						<label class="form-label" for="name">Name</label> 
+						<input class="form-control" id="name" type="text" th:field="*{name}" />
+					</p>
+					<p>
+						<label class="form-label" for="tags">Tags</label> 
+						<input class="form-control" id="tags" type="text" size="60" th:field="*{tagString}" />
+					</p>
+					<p>
+						<label class="form-label" for="schwierigkeit">Schwierigkeit</label>
+						<input class="form-range" id="schwierigkeit" type="range" min="1" max="10" th:field="*{schwierigkeitsgrad}" />
+					</p>
+					<div class="form-check form-switch mb-3">
+						<label class="form-check-label" for="standard">Standardaufgabe</label> 
+						<input class="form-check-input" id="standard" type="checkbox"  th:field="*{standardaufgabe}" />
+					</div>
+					<input class="btn btn-success" type="submit" value="Speichern" />
+				</form>
+			</div>
+							
+			<div id="teilaufgaben" class="my-4">
+				<h3>Teilaufgaben konfigurieren</h3>
+				
+				<p>
+					Eigendef. Fkt.:
+					<a th:if="${template.configFunktionen == null}" th:href="@{/configFunktionen/{id}(id=${template.id})}" class="btn btn-sm btn-primary">Anlegen</a>
+					<a th:if="${template.configFunktionen != null}" th:href="@{/configFunktionen/{id}(id=${template.id})}" class="btn btn-sm btn-warning">Konfigurieren</a>
+					<a th:if="${template.configFunktionen != null}" th:href="@{/configFunktionen/delete/{id}(id=${template.id})}" class="btn btn-sm btn-danger">Löschen</a>
+				</p>
+				<p>
+					Statistiken:
+					<a th:if="${template.configStatistiken == null}" th:href="@{/configStatistiken/{id}(id=${template.id})}" class="btn btn-sm btn-primary">Anlegen</a>
+					<a th:if="${template.configStatistiken != null}" th:href="@{/configStatistiken/{id}(id=${template.id})}" class="btn btn-sm btn-warning">Konfigurieren</a>
+					<a th:if="${template.configStatistiken != null}" th:href="@{/configStatistiken/delete/{id}(id=${template.id})}" class="btn btn-sm btn-danger">Löschen</a>
+				</p>
+				<p>
+					Plausibilitäten:
+					<a th:if="${template.configPlausi == null}" th:href="@{/configPlausi/{id}(id=${template.id})}" class="btn btn-sm btn-primary">Anlegen</a>
+					<a th:if="${template.configPlausi != null}" th:href="@{/configPlausi/{id}(id=${template.id})}" class="btn btn-sm btn-warning">Konfigurieren</a>
+					<a th:if="${template.configPlausi != null}" th:href="@{/configPlausi/delete/{id}(id=${template.id})}" class="btn btn-sm btn-danger">Löschen</a>
+				</p>
+				<p>
+					Formatierung:
+					<a th:if="${template.configFormatierung == null}" th:href="@{/configFormatierung/{id}(id=${template.id})}" class="btn btn-sm btn-primary">Anlegen</a>
+					<a th:if="${template.configFormatierung != null}" th:href="@{/configFormatierung/{id}(id=${template.id})}" class="btn btn-sm btn-warning">Konfigurieren</a>
+					<a th:if="${template.configFormatierung != null}" th:href="@{/configFormatierung/delete/{id}(id=${template.id})}" class="btn btn-sm btn-danger">Löschen</a>
+				</p>
+			</div>
+			
+			<div class="my-4" th:if="${template.datentemplate}">
+				<h3 id="datentemplate">Zugehöriges Datentemplate</h3>
+				<div class="mb-2">
+					<span th:text="${template.datentemplate?.name}"></span>
+					(Id: <span th:text="${template.datentemplate?.id}"></span>)
+				</div>
+				<iframe id="daten" width="100%" height="300" th:srcdoc="${datenHtmlCode}"></iframe>
+			</div>
+			
+			<div class="my-4">
+				<h3 id="datentemplates">Datentemplates</h3>
+				<form class="form my-4" action="#" th:action="@{/aufgabentemplate/{id}#datentemplates(id=${template.id})}" method="get">
+					<input class="form-control" id="filtertext" type="text" size=50 th:value="${filtertext}" name="filtertext" />
+					<div class="mt-2">
+						<input class="btn btn-primary" type="submit" value="Filtern" />
+						<a class="btn btn-primary" th:href="@{/aufgabentemplate/{id}?filtertext#datentemplates(id=${template.id})}">Alle anzeigen</a>
+					</div>
+				</form>
+				<table class="table table-striped">
+					<tr>
+						<th>TemplateId</th>
+						<th>Name</th>
+						<th>Tags</th>
+						<th class="text-center">Zuordnen</th>
+					</tr>
+					<tr class="align-middle" th:classappend="${template.datentemplate?.id} == ${datentemplate.id} ? ' bg-primary-subtle'" th:each="datentemplate : ${datentemplates}">
+						<td><span th:text="${datentemplate.id}"></span></td>
+						<td><span th:text="${datentemplate.name}"></span></td>
+						<td>
+							<a class="badge bg-secondary text-decoration-none mx-1"
+								th:each="tag : ${datentemplate.getTags()}"
+								th:href="@{/aufgabentemplate/{id}?filtertext={tag}#datentemplates(id=${template.id},tag=${tag})}">
+								<span th:text="${tag}"></span>
+							</a>
+						</td>
+						<td class="text-center">
+							<a class="btn btn-sm btn-primary"
+								th:if="${template.datentemplate?.id} != ${datentemplate.id}"
+								th:href="@{/aufgabentemplate/{id}/zuordnen/{datentemplateId}(id=${template.id},datentemplateId=${datentemplate.id})}">
+								<i class="bi-check"></i>
+							</a>
+							<i th:if="${template.datentemplate?.id} == ${datentemplate.id}" class="bi-check"></i>
+						</td>
+				</table>
+			</div>
+			
+			<div class="my-4">
+				<h3>Das Template basiert auf 
+					<span th:text="${template.basierendAuf?.name}"></span>
+					<span th:if="${template.basierendAuf}">(Id: <span th:text="${template.basierendAuf?.id}"></span>)</span>
+					<span th:if="${template.basierendAuf == null}">keinem anderen Template</span>
+					<div class="mt-2" th:if="${template.basierendAuf}">
+						<a class="btn btn-primary" th:href="@{/aufgabentemplate/{id}/vorgaengerLoeschen#vorgaengertemplates(id=${template.id})}">Zuordnung löschen</a>
+					</div>
+				</h3>
+			</div>
+			<div class="my-4">
+				<h3 id="vorgaengertemplates">Potentielle Vorgängertemplates</h3>
+				<form class="form my-4" action="#" th:action="@{/aufgabentemplate/{id}#vorgaengertemplates(id=${template.id})}" method="get">
+					<input class="form-control" id="filtertextVorgaenger" type="text" size=50 th:value="${filtertextVorgaenger}" name="filtertextVorgaenger" />
+					<div class="mt-2">
+						<input class="btn btn-primary" type="submit" value="Filtern" />
+						<a class="btn btn-primary" th:href="@{/aufgabentemplate/{id}?filtertextVorgaenger#vorgaengertemplates(id=${template.id})}">Alle anzeigen</a>
+					</div>
+				</form>
+				<table class="table table-striped">
+					<tr>
+						<th>TemplateId</th>
+						<th>Name</th>
+						<th>Tags</th>
+						<th class="text-center">Zuordnen</th>
+					</tr>
+					<tr class="align-middle" th:classappend="${template.basierendAuf?.id} == ${vorgaengertemplate.id} ? ' bg-primary-subtle'" th:each="vorgaengertemplate : ${relevanteVorgaengerTemplates}">
+						<td><span th:text="${vorgaengertemplate.id}"></span></td>
+						<td><span th:text="${vorgaengertemplate.name}"></span></td>
+						<td>
+							<a class="badge bg-secondary text-decoration-none mx-1"
+								th:each="tag : ${vorgaengertemplate.getTags()}"
+								th:href="@{/aufgabentemplate/{id}?filtertextVorgaenger={tag}#vorgaengertemplates(id=${template.id},tag=${tag})}">
+								<span th:text="${tag}"></span>
+							</a>
+						</td>
+						<td class="text-center">
+							<a class="btn btn-sm btn-primary"
+								th:if="${template.basierendAuf?.id} != ${vorgaengertemplate.id}"
+								th:href="@{/aufgabentemplate/{id}/zuordnenVorgaenger/{vorgaengertemplateId}(id=${template.id},vorgaengertemplateId=${vorgaengertemplate.id})}">
+								<i class="bi-check"></i>
+							</a>
+							<i th:if="${template.basierendAuf?.id} == ${vorgaengertemplate.id}" class="bi-check"></i>
+						</td>
+				</table>
+			</div>
+
+		</div>
+	</body>
+</html>

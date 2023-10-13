@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+<head>
+<title>Hilfe</title>
+</head>
+<body>
+
+	<div id="content">
+
+		<div class="my-4" th:if="${hinweis.parentHinweis}">
+			<a class="btn btn-secondary"
+				th:href="@{/hilfe/{id}(id=${hinweis.parentHinweis.id})}"> <i
+				class="bi-box-arrow-left pe-2"></i> Zurück zur übergeordneten Hilfestellung
+			</a>
+		</div>
+
+		<div class="my-4">
+			<h1>
+				<span th:text="${hinweis.titel}"></span>
+			</h1>
+		</div>
+
+		<div class="my-4" th:if="${hinweis.problem}">
+			<h3>Problem</h3>
+			<div >
+				<span th:utext="${#strings.replace(#strings.escapeXml(hinweis.problem),'&#10;','&lt;br&gt;')}"> </span>
+			</div>
+		</div>
+
+		<div class="my-4" th:if="${hinweis.loesung}">
+			<h3>Lösung</h3>
+			<div >
+				<span th:utext="${#strings.replace(#strings.escapeXml(hinweis.loesung),'&#10;','&lt;br&gt;')}"> </span>
+			</div>
+		</div>
+
+		<div class="my-4" th:if="${!#lists.isEmpty(hinweis.weitereHinweise)}">
+		<h3>Hier finden Sie weitere Hinweise:</h3>
+		<table class="table table-borderless">
+			<tr 
+				th:each="weitererhinweis : ${hinweis.weitereHinweise}">
+				<td><a type="button" class="btn btn-outline-primary"
+					th:href="@{/hilfe/{id}(id=${weitererhinweis.id})}"> <span
+						th:text="${weitererhinweis.titel}"></span>
+				</a></td>
+			</tr>
+		</table>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Aufgabe</title>
+	</head>
+	<body>
+
+		<div id="content">
+
+			<div class="my-4">
+				<a class="btn btn-secondary" th:href="@{/bearbeitung/{id}(id=${aufgabe.bearbeitung.id})}">
+					<i class="bi-box-arrow-left pe-2"></i>
+					Zurück zum Aufgabenblatt
+				</a>
+			</div>
+
+			<div class="my-4">
+				<h1>
+					Aufgabe <span th:text="${aufgabe.nr}"></span>:
+					<span th:text="${aufgabe.aufgabenTemplate.name}"></span>
+				</h1>
+			</div>
+<!-- 
+			<div class="my-4">
+				<h3>Aufgabe abschließen</h3>
+				<ul>
+					<li>
+						<a th:href="@{/aufgabe/abschliessen/{id}/1(id=${aufgabe.id})}">Ich konnte die Aufgabe gut lösen.</a>
+					</li>
+					<li>
+						<a th:href="@{/aufgabe/abschliessen/{id}/2(id=${aufgabe.id})}">Ich fand die Aufgabe schwierig zu lösen.</a>
+					</li>
+					<li>
+						<a th:href="@{/aufgabe/abschliessen/{id}/3(id=${aufgabe.id})}">Ich konnte die Aufgabe nicht lösen.</a>
+					</li>
+				</ul>
+			</div>
+ -->
+			<div class="my-4">
+				<a class="btn btn-outline-primary" th:href="@{/hilfe/aufgabe/{id}(id=${aufgabe.id})}" target=" _blank"><i class="bi-question-square pe-2"></i>Ich brauche Hilfe: Zeige Hinweise in einem neuen Fenster</a>
+			</div>
+
+			<div class="my-4">
+				<h3>Aufgabe herunterladen</h3>
+				<div class="text-danger mb-3" th:if="${message}">
+					<span th:text="${message}"> </span>
+				</div>
+				<div>
+					<a class="btn btn-primary" th:href="@{/aufgabe/pdf/{id}(id=${aufgabe.id})}">
+						<i class="bi-filetype-pdf pe-2"></i>
+						als PDF-Datei
+					</a>
+					<a class="btn btn-primary" th:href="@{/aufgabe/excel/{id}(id=${aufgabe.id})}">
+						<i class="bi-filetype-xlsx pe-2"></i>
+						als Excel-Tabelle mit Daten
+					</a>
+				</div>
+			</div>
+
+			<div class="my-4">
+				<iframe height="660" width="100%" th:srcdoc="${aufgabeHtmlCode}" class="border"></iframe>
+			</div>
+
+		</div>
+
+	</body>
+</html>

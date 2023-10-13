@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Neues Aufgabentemplate</title>
+	</head>
+	<body>
+		<div id="content">
+		
+		<div class="my-4">
+			<a class="btn btn-secondary" th:href="@{/aufgabentemplate}">
+				<i class="bi-box-arrow-left pe-2"></i>
+				Zurück zur Übersicht
+			</a>
+		</div>
+		
+		<div class="my-4">
+			<h1>Neues Aufgabentemplate</h1>
+		</div>
+
+		<div class="my-4">
+			<form class="form" action="#" method="post"
+				th:action="@{/aufgabentemplate/new}"
+				th:object="${template}">
+				<p>
+					<label class="form-label" for="id">Id</label>
+					<input class="form-control" id="id" type="text" th:field="*{id}" readonly />
+				</p>
+				<p>
+					<label class="form-label" for="name">Name</label> 
+					<input class="form-control" id="name" type="text" size="60" th:field="*{name}" />
+				</p>
+				<p>
+					<label class="form-label" for="tags">Tags</label> 
+					<input class="form-control" id="tags" type="text" size="60" th:field="*{tagString}" />
+				</p>
+				<p>
+					<label class="form-label" for="schwierigkeit">Schwierigkeit</label>
+					<input class="form-range" id="schwierigkeit" type="range" min="1" max="10" th:field="*{schwierigkeitsgrad}" />
+				</p>
+				<input class="btn btn-success" type="submit" value="Speichern" />
+			</form>
+		</div>
+	
+		</div>
+	</body>
+</html>

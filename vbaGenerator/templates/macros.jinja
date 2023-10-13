@@ -1,0 +1,67 @@
+{% macro generieretabelle(tabelle, spaltentitel) -%}
+    <table>
+        <tr>
+        {% for titel in spaltentitel %}
+            <th> {{ titel }} </th>
+        {% endfor %}
+        </tr>
+        {% for zeile in tabelle %}
+            <tr>
+            {% for spalte in zeile %}
+                <td> {{ spalte }} </td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{%- endmacro %}
+{% macro generiereauswahl(text, auswahlliste) -%}
+    <ul>
+        {% for auswahl in auswahlliste %}
+            <li> {{ text.format(**auswahl) }} </li>
+        {% endfor %}
+    </ul>
+{%- endmacro %}
+{% macro generierestatistikausgabe(tabelle) -%}
+    <table>
+        {% for (text, wert) in tabelle %}
+            <tr>
+                <td> {{ text }} </td> <td> {{ wert }} </td>
+            </tr>
+        {% endfor %}
+    </table>
+{%- endmacro %}
+{% macro generieretextliste(liste) -%}
+    <ul>
+        {% for text in liste %}
+                <li> {{ text }} </li>
+        {% endfor %}
+    </ul>
+{%- endmacro %}
+{% macro generiere_farbauswahl(auswahlliste) -%}
+    <ul>
+        {% for (bedingung, farbe) in auswahlliste %}
+            <li> {{ bedingung }}: es wird die Farbe {{ farbe }} verwendet. </li>
+        {% endfor %}
+    </ul>
+{%- endmacro %}
+{% macro generieretabelle_mit_formatierung(tabelle, spaltentitel, formatierungen) -%}
+    <table>
+        <tr>
+        {% for titel in spaltentitel %}
+            <th> {{ titel }} </th>
+        {% endfor %}
+        </tr>
+        {% for zeile in tabelle %}
+            {% set formatierung = formatierungen[loop.index0] %}
+                    {% set zeilenformat = 'style="' %}
+                    {% if formatierung.schrift %} {% set zeilenformat = zeilenformat ~ formatierung.schrift ~ "; "%} {% endif %}
+                    {% if formatierung.farbe %} {% set zeilenformat =  zeilenformat ~ (formatierung.faerbung + ": " ~ "rgb({},{},{}); ".format(formatierung.farbe[0], formatierung.farbe[1], formatierung.farbe[2])) %}  {% endif %}
+                    {% set zeilenformat = zeilenformat ~ '"' %}
+            <tr {{ zeilenformat }} >
+            {% for spalte in zeile %}
+                 <td>  {{ spalte }} </td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{%- endmacro %}

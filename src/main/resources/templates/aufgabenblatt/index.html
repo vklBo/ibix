@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Aufgabenblätter</title>
+	</head>
+	<body>
+		
+		<div id="content">
+
+			<div class="my-4">
+				<h1>Aufgabenblätter</h1>
+			</div>
+
+			<div class="my-4">
+				<form class="form" action="#" th:action="@{/aufgabenblatt}" method="get">
+					<input class="form-control" id="filtertext" type="text" size=30 th:value="${filtertext}" name="filtertext" />
+					<div class="mt-2">
+						<input class="btn btn-primary" type="submit" value="Filtern" />
+						<a class="btn btn-primary" th:href="@{/aufgabenblatt?filtertext}">Alle anzeigen</a>
+					</div>
+				</form>
+			</div>
+
+			<div class="my-4">
+				<table class="table table-striped">
+					<tr>
+						<th>Nr</th>
+						<th>Name</th>
+						<th>Inaktiv</th>
+						<th>Prüfung</th>
+						<th>Beginn der Ausgabe</th>
+						<th>Ende der Ausgabe</th>
+						<th>Bearbeitungsdauer</th>
+						<th>Tags</th>
+						<th class="text-center">Bearbeiten</th>
+					</tr>
+					<tr class="align-middle" th:each="aufgabenblatt : ${aufgabenblaetter}">
+						<td><span th:text="${aufgabenblatt.nr}"></span></td>
+						<td><span th:text="${aufgabenblatt.name}"></span></td>
+						<td><span th:text="${aufgabenblatt.inaktiv}" th:class="'text-' + (!${aufgabenblatt.inaktiv} ? 'success' : 'danger') + '-emphasis'"></span></td>
+						<td><span th:text="${aufgabenblatt.klausur}" th:class="'text-' + (${aufgabenblatt.klausur} ? 'success' : 'danger') + '-emphasis'"></span></td>
+						<td><span th:text="${aufgabenblatt.start}" th:class="'text-' + (${aufgabenblatt.isGestartet()} ? 'success' : 'danger') + '-emphasis'"></span></td>
+						<td><span th:text="${aufgabenblatt.ende}" th:class="'text-' + (${aufgabenblatt.isBeendet()} ? 'danger' : 'success') + '-emphasis'"></span></td>
+						<td><span th:text="${aufgabenblatt.dauer}"></span></td>
+						<td>
+							<a class="badge bg-secondary text-decoration-none mx-1"
+								th:each="tag : ${aufgabenblatt.getTags()}"
+								th:href="@{/aufgabenblatt?filtertext={tag}(tag=${tag})}">
+								<span th:text="${tag}"></span>
+							</a>
+						</td>
+						<td class="text-center">
+							<a class="btn btn-sm btn-warning" th:href="@{/aufgabenblatt/{id}(id=${aufgabenblatt.id})}">
+								<i class="bi-pencil"></i>
+							</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="my-4">
+				<a class="btn btn-primary" th:href="@{/aufgabenblatt/new}">
+					<i class="bi-plus pe-2"></i>
+					Neues Aufgabenblatt anlegen
+				</a>
+			</div>
+			
+		</div>
+
+	</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Aufgabentypen</title>
+	</head>
+	<body>
+	
+		<div id="content">
+
+			<div class="my-4">
+				<h1>Aufgabentypen</h1>
+			</div>
+			
+			<div class="my-4">
+				<form class="form" action="#" th:action="@{/aufgabentyp}" method="get">
+					<input class="form-control" id="filtertext" type="text" size=30 th:value="${filtertext}" name="filtertext" />
+					<div class="mt-2">
+						<input class="btn btn-primary" type="submit" value="Filtern" />
+						<a class="btn btn-primary" th:href="@{/aufgabentyp?filtertext}">Alle anzeigen</a>
+					</div>
+				</form>
+			</div>
+			
+
+			<div class="my-4">
+				<table class="table table-striped">
+					<tr>
+						<th>Name</th>
+						<th>Lernziel</th>
+						<th>Tags</th>
+						<th>Programmiersprache</th>
+						<th class="text-center">Bearbeiten</th>
+					</tr>	
+					<tr class="align-middle" th:each="aufgabentyp : ${aufgabentypen}">
+						<td><span th:text="${aufgabentyp.name}"></span></td>
+						<td><span th:text="${aufgabentyp.lernziel}"></span></td>
+						<td>
+							<a class="badge bg-secondary text-decoration-none mx-1"
+								th:each="tag : ${aufgabentyp.getTags()}"
+								th:href="@{/aufgabentyp?filtertext={tag}(tag=${tag})}">
+								<span th:text="${tag}"></span>
+							</a>
+						</td>
+						<td><code th:text="${aufgabentyp.programmiersprache}"></code></td>
+						<td class="text-center">
+							<a class="btn btn-sm btn-warning" th:href="@{/aufgabentyp/{id}(id=${aufgabentyp.id})}">
+								<i class="bi-pencil"></i>
+							</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="my-4">
+				<a class="btn btn-primary" th:href="@{/aufgabentyp/new}">
+					<i class="bi-plus pe-2"></i>
+					Neuen Aufgabentyp anlegen
+				</a>
+			</div>
+
+		</div>
+	</body>
+</html>

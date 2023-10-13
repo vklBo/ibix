@@ -1,0 +1,32 @@
+<h2> Aufgabe: {{ aufgabenname }} - Plausibilitätsprüfungen </h2>
+
+{% if plausitext %}
+<h4> {{ plausitext }} </h4>
+{% endif %}
+
+Programmieren Sie eine Prozedur "{{ plausiprozedurname }}()", mit der Sie die Daten Ihrer Tabelle auf Plausibilität prüfen.
+
+Folgende Plausibilitätsprüfungen sollen durchgeführt werden:
+
+{{ my.generieretextliste(plausiaufgaben) }}
+
+Die Ausgabe der Verstöße gegen die Plausibilitätskontrollen erfolgt in Tabellenblatt 3. Geben Sie die Fehler in die
+Spalte {{ "ABCDEFG"[ausgabespalte-1] }} beginnend ab Zeile {{ ausgabezeile }} aus. Sind alle Eingaben okay, wird
+eine MsgBox mit der Meldung ''Alles okay'' aufgeblendet, ansonsten eine MsgBox mit dem Hinweis darauf, dass ein Verstoß
+gegen die Plausibilitäten vorliegen.
+
+Unten dargestellte Abbildung
+
+{{ my.generieretabelle(tabelleMitFehlern, spaltentitel) }}
+
+erzeugt folgendes Fehlerprotokoll:
+
+{{ my.generieretextliste(fehlertexte) }}
+
+Beachten Sie folgende Randbedingungen:
+<ul>
+<li> Für <em>alle</em> Plausibilitätsprüfungen sowie für die Berechnung der letzten Zeile verwenden Sie Funktionen!
+<li> Die aufgetretenen Verstöße gegen die Plausibilitäten werden zunächst auf ein Fehlerarray geschrieben und dann
+insgesamt ausgegeben. Dazu verwenden Sie jeweils eigene Prozeduren (also eine zum Besetzen des
+Fehlerarrays und eine für die Ausgabe).
+</ul>

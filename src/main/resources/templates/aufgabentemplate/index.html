@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Aufgabentemplates</title>
+	</head>
+	<body>
+		<div id="content">
+
+			<h1 class="my-4">Aufgabentemplates</h1>
+			
+			<div class="my-4">
+				<form class="form" action="#" th:action="@{/aufgabentemplate}" method="get">
+					<input class="form-control" id="filtertext" type="text" size=30 th:value="${filtertext}" name="filtertext" />
+					<div class="mt-2">
+						<input class="btn btn-primary" type="submit" value="Filtern" />
+						<a class="btn btn-primary" th:href="@{/aufgabentemplate?filtertext}">Alle anzeigen</a>
+					</div>
+				</form>
+			</div>
+
+			<div class="my-4">
+				<table class="table table-striped">
+					<tr>
+						<th>Id</th>
+						<th>Name</th>
+						<th>Schwierigkeit</th>
+						<th>Tags</th>
+						<th>Bearbeiten</th>
+						<th>Kopieren</th>
+					</tr>
+					<tr class="align-middle" th:each="template : ${templates}">
+						<td><span th:text="${template.id}"></span></td>
+						<td><span th:text="${template.name}"></span></td>
+						<td><span th:text="${template.schwierigkeitsgrad}"></span></td>
+						<td>
+							<a class="badge bg-secondary text-decoration-none mx-1"
+								th:each="tag : ${template.getTags()}"
+								th:href="@{/aufgabentemplate?filtertext={tag}(tag=${tag})}">
+								<span th:text="${tag}"></span>
+							</a>
+						</td>
+						<td class="text-center">
+							<a class="btn btn-sm btn-warning" th:href="@{/aufgabentemplate/{id}(id=${template.id})}">
+								<i class="bi-pencil"></i>
+							</a>
+						</td>
+						<td class="text-center">
+							<a class="btn btn-sm btn-primary" th:href="@{/aufgabentemplate/copy/{id}(id=${template.id})}">
+								<i class="bi-clipboard-plus"></i>
+							</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="my-4">
+				<a class="btn btn-primary" th:href="@{/aufgabentemplate/new}">
+					<i class="bi-plus pe-2"></i>
+					Neues Aufgabentemplate anlegen
+				</a>
+			</div>
+
+		</div>
+	</body>
+</html>

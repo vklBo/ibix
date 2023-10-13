@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Spaltendefinitionen</title>
+	</head>
+	<body>
+		<div id="content">
+		
+			<div class="my-4">
+				<a class="btn btn-secondary" th:href="@{/spaltendefinition}">
+					<i class="bi-box-arrow-left pe-2"></i>
+					Zurück zur Übersicht
+				</a>
+			</div>
+
+			<div class="my-4">
+				<form action="#" method="post"
+					th:action="@{/spaltendefinition/{id}(id=${spaltendefinition.id})}"
+					th:object="${spaltendefinition}">
+					<input id="config" type="hidden" th:field="*{config}" />
+					<table class="table table-striped m-0">
+						<tr>
+							<th colspan="2">Spaltendefinition</th>
+							<th>Erläuterungen</th>
+						</tr>
+						<tr>
+							<td><label class="form-label" for="id">Id</label></td>
+							<td><input class="form-control-plaintext" id="id" type="text" th:field="*{id}" readonly /></td>
+							<td>Identifier - kann nicht geändert werden.</td>
+						</tr>
+						<tr>
+							<td><label class="form-label" for="titel">Titel</label></td>
+							<td><input class="form-control" id="titel" type="text" th:field="*{titel}" /></td>
+							<td>Überschrift der Spalte in der Excel-Tabelle</td>
+						</tr>
+						<tr>
+							<td><label class="form-label" for="name">Name</label></td>
+							<td><input class="form-control" id="name" type="text" th:field="*{name}" /></td>
+							<td>Interner Name für Bezüge, daraus werden aber auch Variablen- und Konstantennamen generiert. Darf kein Leerzeichen enthalten.</td>
+						</tr>
+						<tr>
+							<td><label class="form-label" for="name">Tags</label> </td>
+							<td><input class="form-control" id="name" type="text" th:field="*{tagString}" /></td>
+							<td>Liste von beliebigen Kennzeichen (mit # beginnend), nach denen ggf. gesucht werden soll</td>
+						</tr>
+						<tr>
+							<td><label class="form-label" for="typ">Typ</label></td>
+							<td>
+								<select class="form-select" th:field="*{typ}">
+									<option th:selected="${typ=='zahl'}" th:value="zahl" th:text="zahl"></option>
+									<option th:selected="${typ=='text'}" th:value="text" th:text="text"></option>
+									<option th:selected="${typ=='berechnet'}" th:value="berechnet" th:text="berechnet">berechnet</option>
+									<option th:selected="${typ=='bestimmt'}" th:value="bestimmt" th:text="bestimmt">bestimmt</option>
+								</select>
+							</td>
+							<td>
+								<ul class="m-0">
+									<li>zahl: das System generiert eine Zahl im vorgegebenen Intervall</li>
+									<li>text: das System generiert einen Text aus der vorgebenen Auswahl</li>
+									<li>berechnet: das System wendet den Rechenausdruck aus wert an</li>
+									<li>bestimmt: das System bestimmt anhand der Spalte wert einen aus den Intervallen vorgegebenen Wert (immer eine Zahl)</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td><label class="form-label" for="auswahl">Auswahl</label></td>
+							<td><input class="form-control" id="auswahl" type="text" th:field="*{auswahl}" /></td>
+							<td>
+								<ul class="m-0">
+									<li>x: die Texte des Feldes werden alle für eine Textauswahl verwendet</li>
+									<li>n (n eine Zahl): für einen Zahlenfeld werden n zufällige Intervalle für eine Auswahl gebildet</li>
+									<li>Liste: bei einem Textfeld wird für die Elemente der Liste eine Auswahl gebildet, sowie für Sonstige</li>
+									<li>bei einem Zahlenfeld werden die Elemente der Liste für eine Auswahl verwendet (operator &lt;&equals;)</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td><label class="form-label" for="inhalt">Inhalt</label></td>
+							<td><textarea class="form-control" id="inhalt" rows="4" cols="60" wrap="virtual" th:field="*{inhalt}"></textarea></td>
+							<td>Werte, mit denen die Spalte gefüllt werden sollen. Dies
+								können kommaseparierte Listen oder (bei Typ berechnet)
+								Rechenausdrücke sein.</td>
+						</tr>
+						<tr>
+							<td><label class="form-label" for="intervalle">Intervalle</label></td>
+							<td><input class="form-control" id="text" type="text" th:field="*{intervalle}" /></td>
+							<td>Ein oder mehrere Intervalle, mit den die Wertebereiche der Spalte festgelegt werden</td>
+						</tr>
+						<tr>
+							<td>Formatierung</td>
+							<td></td>
+							<td>Normalerweise wird die Formatierung aus dem Typ und den
+								Stellen der Intervalle bestimmt. Dies kann man hier anpassen.
+								Berechnete Spalten, die einen Text liefern, müssen als Text
+								formatiert werden.</td>
+						</tr>
+						<tr>
+							<td><label class="form-check-label" for="alsZahl">Als Zahl</label></td>
+							<td><input class="form-check-input" id="alsZahl" type="checkbox" th:field="*{format.zahl}" /></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><label class="form-check-label" for="alsText">Als Text</label></td>
+							<td><input class="form-check-input" id="alsText" type="checkbox" th:field="*{format.text}" /></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><label class="form-label" for="stellen">Stellen</label></td>
+							<td><input class="form-control" id="stellen" type="text" th:field="*{format.stellen}" /></td>
+							<td></td>
+						</tr>
+					</table>
+					<input class="btn btn-success mt-4" type="submit" value="Speichern" />
+				</form>
+			</div>
+			
+		</div>
+	</body>
+</html>

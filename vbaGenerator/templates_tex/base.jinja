@@ -1,0 +1,58 @@
+{% if klausur %}
+
+{% else %}
+
+\documentclass[a4paper,german]{scrarticle}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{scrlayer-scrpage}
+\usepackage[left=25mm, right=20mm, top=25mm, bottom=20mm]{geometry}
+\usepackage{textfit}
+\usepackage[table]{xcolor}
+\usepackage{lmodern}
+\KOMAoption{parskip}{half}
+\KOMAoption{headsepline}{true}
+\KOMAoption{fontsize}{11pt}
+\usepackage{tikz}
+\pagestyle{scrheadings}
+\clearpairofpagestyles
+
+\chead{\normalfont Aufgabe Wirtschaftsinformatik}
+%\ohead{\pagemark }
+
+\newcommand{\einleitung}{}
+
+\begin{document}
+    \einleitung
+{% endif %}
+
+
+{% import 'macros.jinja' as my %}
+
+
+    {% if aufgabe1 %}
+        {% include "aufgabe1.jinja" %}
+        \pagebreak
+    {% endif %}
+
+    {% if aufgabe2 %}
+        {% include "aufgabe2.jinja" %}
+        \pagebreak
+    {% endif %}
+
+    {% if aufgabe3 %}
+        {% include "aufgabe3.jinja" %}
+        \pagebreak
+    {% endif %}
+
+    {% if aufgabe4 %}
+        {% include "aufgabe4.jinja" %}
+    {% endif %}
+
+{% if klausur %}
+{% else %}
+    \pagebreak
+\end{document}
+{% endif %}

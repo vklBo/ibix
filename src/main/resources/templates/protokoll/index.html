@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Protokolldaten</title>
+	</head>
+	<body>
+		
+		<div id="content">
+
+			<div class="my-4">
+				<h1>Protokolldaten</h1>
+			</div>
+
+			<div class="my-4">
+				<form class="form" action="#" th:action="@{/protokoll}" method="get">
+					<input class="form-control" id="filtertext" type="text" size=30 th:value="${filtertext}" name="filtertext" />
+					<div class="mt-2">
+						<input class="btn btn-primary" type="submit" value="Filtern" />
+						<a class="btn btn-primary" th:href="@{/protokoll?filtertext}">Alle anzeigen</a>
+					</div>
+				</form>
+			</div>
+
+			<div class="my-4">
+				<table class="table table-striped">
+					<tr>
+						<th>Userhash</th>
+						<th>Aktion</th>
+						<th>Zeitstempel>
+						<th>Prozent</th>
+						<th>Bewertungstext</th>
+						<th>VBACode</th>
+						<th>PythonCode</th>
+						<th>AufgabenID</th>
+						<th>BearbeitungID</th>
+						<th>HinweisID</th>
+						<th class="text-center">Anzeigen</th>
+					</tr>
+					<tr class="align-middle" th:each="protokoll : ${protokolldaten}">
+						<td><span th:text="${protokoll.benutzerHash}"></span></td>
+						<td><span th:text="${protokoll.aktion}"></span></td>
+						<td><span th:text="${#temporals.format(protokoll.timestamp, 'dd.MM.yyyy HH:mm:ss')}"></span></td>
+						<td><span th:text="${protokoll.bewertung}"></span></td>
+						<td><span th:text="${#strings.abbreviate(protokoll.bewertungsText, 30)}"></span></td>
+						<td><span th:text="${#strings.abbreviate(protokoll.vbaCode, 30)}"></span></td>
+						<td><span th:text="${#strings.abbreviate(protokoll.pythonCode, 30)}"></span></td>
+						<td><span th:text="${protokoll.aufgabe?.id}"></span></td>
+						<td><span th:text="${protokoll.bearbeitung?.id}"></span></td>
+						<td><span th:text="${protokoll.hinweis?.id}"></span></td>
+						<td class="text-center">
+							<a class="btn btn-sm btn-warning" th:href="@{/protokoll/{id}(id=${protokoll.id})}">
+								<i class="bi bi-info-circle"></i>
+							</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+	</body>
+</html>

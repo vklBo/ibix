@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Aufgabentyp</title>
+	</head>
+	<body>
+	
+		<div id="content">
+		
+			<div class="my-4">
+				<a class="btn btn-secondary" th:href="@{/aufgabentyp}">
+					<i class="bi-box-arrow-left pe-2"></i>
+					Zurück zur Übersicht
+				</a>
+			</div>
+
+			<div class="my-4">
+				<h1>Aufgabentyp: <span th:text="${aufgabentyp.name}"></span></h1>
+			</div>
+		
+			<div class="my-4">
+				<form class="form" action="#" method="post"
+					th:action="@{/aufgabentyp/{id}(id=${aufgabentyp.id})}"
+					th:object="${aufgabentyp}">
+					<p>
+						<label class="form-label" for="id">Id</label>
+						<input class="form-control-plaintext" id="id" type="text" th:field="*{id}" readonly />
+					</p>
+					<p>
+						<label class="form-label" for="name">Name</label>
+						<input class="form-control" id="name" type="text" th:field="*{name}" />
+					</p>
+					<p>
+						<label class="form-label" for="lernziel">Lernziel</label>
+						<input class="form-control" id="lernziel" type="text" th:field="*{lernziel}" />
+					</p>
+					<p>
+						<label class="form-label" for="programmiersprache">Programmiersprache</label>
+						<input class="form-control" id="programmiersprache" type="text" th:field="*{programmiersprache}" />
+					</p>
+					<p>
+						<label class="form-label" for="tags">Tags</label> 
+						<input class="form-control" id="tags" type="text" size="60" th:field="*{tagString}" />
+					</p>
+					<input class="btn btn-success" type="submit" value="Speichern" />
+				</form>
+			</div>
+
+			<div class="my-4">
+				<h3 id="aufgabentemplates">Aufgabentemplates</h3>
+				<table>
+					<tr>
+						<th valign="top">Zugeordnet</th>
+						<th valign="top">
+							Alle Templates
+							<form class="form" action="#" method="get" th:action="@{/aufgabentyp/{id}(id=${aufgabentyp.id})}">
+								<input class="form-control" id="filtertext" type="text" size=50 th:value="${filtertext}" name="filtertext" />
+								<div class="my-2">
+									<input class="btn btn-primary" type="submit" value="Filtern" />
+									<a class="btn btn-primary" th:href="@{/aufgabentyp/{id}?filtertext(id=${aufgabentyp.id})}">Alle anzeigen</a>
+								</div>
+							</form>
+						</th>
+					</tr>
+					</tr>
+					<tr valign="top">
+						<td>
+							<table class="table table-striped">
+								<tr>
+									<th>Id</th>
+									<th>Name</th>
+									<th>Schwierigkeit</th>
+									<th class="text-center">Entfernen</th>
+								</tr>
+								<tr class="align-middle" th:each="aufgabentemplate : ${aufgabentyp.aufgabenTemplates}">
+									<td th:text="${aufgabentemplate.id}"></td>
+									<td th:text="${aufgabentemplate.name}"></td>
+									<td th:text="${aufgabentemplate.schwierigkeitsgrad}"></td>
+									<td class="text-center">
+										<a class="btn btn-sm btn-danger" th:href="@{/aufgabentyp/{id}/entfernen/{templateId}(id=${aufgabentyp.id},templateId=${aufgabentemplate.id})}">
+											<i class="bi-x"></i>
+										</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td>
+							<table class="table table-striped">
+								<tr>
+									<th>Id</th>
+									<th>Name</th>
+									<th>Tags</th>
+									<th class="text-center">Auswählen</th>
+								</tr>
+								<tr class="align-middle" th:each="aufgabentemplate : ${alleAufgabentemplates}">
+									<td>
+										<a th:href="@{/aufgabentemplate/{id}(id=${aufgabentemplate.id})}">
+											<span th:text="${aufgabentemplate.id}"></span>
+										</a>
+									</td>
+									<td th:text="${aufgabentemplate.name}"></td>
+										<td>
+											<a class="badge bg-secondary text-decoration-none mx-1"
+												th:each="tag : ${aufgabentemplate.getTags()}"
+												th:href="@{/aufgabentyp/{id}?filtertext={tag}(id=${aufgabentyp.id},tag=${tag})}">
+											<span th:text="${tag}"></span>
+											</a>
+										</td>
+									<td class="text-center">
+										<a class="btn btn-sm btn-primary" th:href="@{/aufgabentyp/{id}/zuordnen/{templateId}(id=${aufgabentyp.id},templateId=${aufgabentemplate.id})}">
+											<i class="bi-check"></i>
+										</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
+	</body>
+</html>

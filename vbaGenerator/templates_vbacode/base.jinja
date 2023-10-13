@@ -1,0 +1,24 @@
+{% import 'macros.jinja' as my %}
+{% if aufgabe1 %}
+    {% include "aufgabe1.jinja" %}
+{% endif %}
+
+
+{% if aufgabe1 or aufgabe2 or aufgabe3 %}
+Option Explicit
+{% endif %}
+
+{% if aufgabe2 %}
+    {% include "aufgabe2.jinja" %}
+{% endif %}
+
+
+{% if aufgabe3 %}
+    {% include "aufgabe3.jinja" %}
+{% endif %}
+
+
+{% if aufgabe4 %}
+    {% include "aufgabe4.jinja" %}
+{% endif %}
+

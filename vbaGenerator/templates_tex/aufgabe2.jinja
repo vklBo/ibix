@@ -1,0 +1,29 @@
+{% if klausur %}
+    \aufgabe{Aufgabe 2 (VBA 20 Punkte)}
+{% else %}
+    \subsection*{Aufgabe: {{ aufgabenname }} -- Statistiken }
+{% endif %}
+
+{% if statistiktext %}
+\emph{ {{ statistiktext }} }
+{% endif %}
+
+Programmieren Sie eine Prozedur ''\verb+{{ statistikprozedurname }}()+'', mit der Sie Statistiken berechnen.
+
+Für die unten dargestellte Tabelle in Tabellenblatt~1
+
+{{ my.generieretabelle(tabelle, spaltentitel) }}
+
+berechnen Sie folgende Statistiken in Tabellenblatt~2:
+
+{{ my.generierestatistikausgabe(statistikaufaufgaben) }}
+
+In der Darstellung sind die Ausgaben gerundet. Dies ist in Ihrer Lösung nicht erforderlich.
+
+{% if klausur %}
+Verwenden Sie Funktionen aus dem Modul Standardfunktionen für die Berechnung der letzten Zeile, von Maxima, Minima und bei
+Divisionen, bei denen der Nenner 0 werden kann. Ihre Lösung soll auch funktionieren, wenn der
+Button nicht auf Tabellenblatt 1 liegt.
+{% else %}
+Denken Sie daran, Durchschnitte, die sich nicht auf alle Datensätze beziehen, vor der Division durch 0 zu schützen.
+{% endif %}

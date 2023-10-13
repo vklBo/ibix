@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Aufgabenblatt</title>
+	</head>
+	<body>
+
+		<div id="content">
+		
+			<div class="my-4">
+				<a class="btn btn-secondary" th:href="@{/bearbeitung}">
+					<i class="bi-box-arrow-left pe-2"></i>
+					Zurück zu den Aufgabenblättern
+				</a>
+			</div>
+
+			<div class="my-4">
+				<h1>
+					Aufgabenblatt <span th:text="${bearbeitung.aufgabenblatt.nr}"></span>:
+					<span th:text="${bearbeitung.aufgabenblatt.name}"></span>
+				</h1>
+			</div>
+
+
+			<table class="table table-striped my-4">
+				<tr>
+					<td>Ausgabe des Aufgabenblatts</td>
+					<td>
+						<span th:text="${#temporals.format(bearbeitung.ausgabe, 'dd.MM.yyyy HH:mm:ss')}"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>Späteste Abgabe der Lösung</td>
+					<td th:if="${!bearbeitung.abgelaufen}">
+						<span th:text="${#temporals.format(bearbeitung.spaetesteAbgabe, 'dd.MM.yyyy HH:mm:ss')}"></span>
+					</td>
+					<td th:if="${bearbeitung.abgelaufen}">
+						<span class="text-danger"  th:text="${#temporals.format(bearbeitung.spaetesteAbgabe, 'dd.MM.yyyy HH:mm:ss')}"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>Tatsächliche Abgabe der Lösung</td>
+					<td th:if="${!bearbeitung.verspaetet}">
+						<span th:text="${#temporals.format(bearbeitung.abgabe, 'dd.MM.yyyy HH:mm:ss')}"></span>
+					</td>
+					<td th:if="${bearbeitung.verspaetet}">
+						<span class="text-danger" th:text="${#temporals.format(bearbeitung.abgabe, 'dd.MM.yyyy HH:mm:ss')}"></span>
+						<span class="text-danger">(verspätet)</span>
+					</td>
+				</tr>
+			</table>
+
+			<div class="my-4">
+				<h3>Aufgaben</h3>
+				<div class="my-3">
+					<h4>
+						<span th:text="${bearbeitung.aufgabenblatt.zusatztext}"></span>
+					</h4>
+				</div>
+				<table class="table table-striped">
+					<tr>
+						<th>Nr</th>
+						<th>Name</th>
+						<th>Lernziel</th>
+						<th>Bonuspunkte</th>
+						<th colspan="2" style="text-align: center;">Gelöst</th>
+						<th class="text-center">Bearbeiten</th>
+					</tr>
+					<tr class="align-middle" th:each="aufgabe : ${bearbeitung.aufgaben}">
+						<td><span th:text="${aufgabe.nr}"></span></td>
+						<td><span th:text="${aufgabe.aufgabenTemplate.name}"></span></td>
+						<td><span th:if="${aufgabe.aufgabenTemplate.aufgabentyp}" th:text="${aufgabe.aufgabenTemplate.aufgabentyp.lernziel}"></span></td>
+						<td><span th:text="${aufgabe.bonuspunkte}"></span></td>
+						<td><span th:if="${aufgabe.prozent != null}" class="badge text-bg-secondary" th:style="${'background-color:rgba(60, 255, 90,' +  (aufgabe.prozent + 20) / 120.0 + ')!important; color:black!important; width:53px;'}" th:text="${aufgabe.prozent + '%'}"></span></td>
+						<td>
+							<button th:if="${aufgabe.prozent != null}" type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" th:data-bs-target="${'#modal' + aufgabe.id}">
+							  <i class="bi-info-lg"></i>
+							</button>	
+							
+							<div class="modal fade" th:id="${'modal' + aufgabe.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+							        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							      </div>
+							      <div class="modal-body" th:utext="${details.get(aufgabe.id)}">
+							      </div>
+							      <div class="modal-footer">
+							        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							      </div>
+							    </div>
+							  </div>
+							</div>
+						<td class="text-center">
+							<a class="btn btn-sm btn-warning" th:href="@{/aufgabe/{id}(id=${aufgabe.id})}">
+								<i class="bi-pencil"></i>
+							</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+			<div class="my-4">
+				<h3>Lösungsvorlage</h3>
+				
+				Die Excel-Datei mit den Tabellen für alle Aufgaben des Aufgabenblattes als Lösungsvorlage herunterladen:
+				
+				<div class="my-2">
+					<form class="form" method="GET" th:action="@{/bearbeitung/{id}/LoesungsVorlage.xlsm(id=${bearbeitung.id})}">
+						<button class="btn btn-primary" type="submit">
+						<i class="bi-filetype-xlsx pe-2"></i>
+							L&ouml;sungsvorlage.xlsm
+						</button>
+					</form>
+				</div>
+			
+			</div>
+			
+
+			
+			<div class="my-4">
+				<h3>Lösungsdatei</h3>
+
+				<div class="alert alert-danger my-2" th:if="${message}">
+					<span th:text="${message}"></span>
+				</div>
+
+				<div class="my-2" th:if="${!bearbeitung.abgelaufen or !bearbeitung.loesungVorhanden}">
+					<form class="form" method="POST" enctype="multipart/form-data"
+						th:action="@{/bearbeitung/upload/{id}(id=${bearbeitung.id})}">
+						<input class="form-control mb-2" type="file" accept=".xlsm" name="file" />
+						<button class="btn btn-success" type="submit">
+							<i class="bi-box-arrow-up pe-2"></i>
+							Hochladen und Bewerten
+						</button>
+					</form>
+				</div>
+					
+				<div class="my-2" th:if="${bearbeitung.abgelaufen and bearbeitung.getLoesungVorhanden()}">
+					Wegen abgelaufener Bearbeitungszeit ist kein Upload mehr möglich.
+				</div>
+			
+				<div class="my-2" th:if="${bearbeitung.getLoesungVorhanden()}">
+					<a class="btn btn-primary me-2" th:href="@{/bearbeitung/loesungsdatei/{id}(id=${bearbeitung.id})}">
+						<i class="bi-box-arrow-down pe-2"></i> Herunterladen
+					</a>
+					<!-- 
+					<a class="btn btn-primary" th:href="@{/bearbeitung/bewerte/{id}(id=${bearbeitung.id})}">
+						<i class="bi-star pe-2"></i>
+						Lösung bewerten lassen
+					</a>
+					<span class="text-muted text-sm">(temporär, kann später direkt beim hochladen gemacht werden)</span>
+					 -->
+				</div>
+			</div>
+
+		</div>
+		
+		
+
+	</body>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</html>

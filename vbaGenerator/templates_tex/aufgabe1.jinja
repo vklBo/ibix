@@ -1,0 +1,13 @@
+{% if klausur %}
+    \aufgabe{Aufgabe 1 (VBA 20 Punkte)}
+{% else %}
+    \subsection*{Aufgabe: {{ aufgabenname }} -- Benutzerdefinierte Funktion }
+{% endif %}
+
+{% include "aufgabe1/" + aufgabennummer + ".jinja" %}
+
+
+Der Aufruf der Funktion zur Berechnung der letzten Tabellenspalte erfolgt mit \linebreak[4]
+\texttt{ {{ funktionsaufruf }} }
+
+{{ my.generieretabelle(tabelle, spaltentitel) }}

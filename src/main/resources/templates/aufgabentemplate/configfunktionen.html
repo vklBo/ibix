@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Config: Funktionen</title>
+	</head>
+	<body>
+		<div id="content">
+			
+			<div class="my-4">
+				<a class="btn btn-secondary" th:href="@{/aufgabentemplate/{id}#teilaufgaben(id=${templateId})}">
+					<i class="bi-box-arrow-left pe-2"></i>
+					Zurück zum Aufgabentemplate
+				</a>
+			</div>
+		
+			<div class="my-4">
+				<h1>Konfiguration: Eigendefinierte Funktion</h1>
+			</div>
+
+			<div class="my-4">
+				<form class="form" action="#" method="post"
+					th:action="@{/configFunktionen/{id}(id=${templateId})}"
+					th:object="${configFunktionen}">
+					<div class="mb-3">
+						<label class="fw-bold" for="funktionsname">Funktionsname</label>
+						<div class="text-muted mb-2">
+							Wird der Funktionsname leer gelassen, ergibt er sich aus dem Namen der zu berechnenden Spalte.
+						</div>
+						<input class="form-control" id="funktionsname" type="text" th:field="*{funktionsname}" />
+					</div>
+					<div class="mb-3">
+						<label class="fw-bold" for="aufgabentext">Aufgabentext</label>
+						<div class="text-muted mb-2">
+							Den Aufgabentext ohne Formatierung eingeben. Absätze werden durch Leerzeilen gekennzeichnet.
+							<ul>
+								<li>
+									Texte für Alternativen werden automatisch mit
+									<code>{{ my.generiereauswahl("Für {auswahlwert} zahlen Sie {zielwert} Euro", spaltenname) }}</code>
+									erzeugt, wobei <code>spaltenname</code> der Name einer Spalte mit Auswahlmöglichkeiten ist,
+									<code>auswahlwert</code> und <code>zielwert</code> kennzeichnen die Bedingung und den
+									entsprechenden Wert (die Bezeichnungen müssen nicht geändert werden).
+								</li>
+								<li>
+									Variablen/Spalten der Ordnung 0 (die also generell für alle Zeilen gelten) können mit
+									<code>{{spaltenname}}</code> in den Text aufgenommen werden.
+								</li>
+								<li>
+									Variablen/Spalten für Aufschläge können mit
+									<code>{{ spaltenname[0].zielwert }}</code> in den Text aufgenommen werden.
+								</li>
+							</ul>
+						</div>
+						<textarea class="form-control" rows="12" id="aufgabentext" th:field="*{aufgabentext}"></textarea>
+					</div>
+					<input class="btn btn-success" type="submit" value="Speichern" />
+				</form>
+			</div>
+
+		</div>
+	</body>
+</html>

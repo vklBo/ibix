@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="header(title, content)">
+	<head>
+
+		<meta charset="UTF-8">
+		<title th:replace="${title}">(No title)</title>
+		
+		<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+		<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap-icons.css}">
+		<script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.bundle.min.js}"></script>
+				
+		<link rel="stylesheet" th:href="@{/css/style.css}">
+	</head>
+
+	<body>
+    <div class="banner">
+      <div>
+    	<img th:src="@{/images/kit/IBIX+BO_Task_weiss.svg}"
+				style="height: 160px; float: left; margin-top:-32px; margin-left:20px"
+				src="" alt="IBIX Projektlogo"> 
+    	<img th:src="@{/images/hsbo_white.svg}" style="height: 60px; float: right; margin: 8px; margin-right: 20px;">
+  	  </div>
+	</div>
+	
+	<div style="clear: both; height: 0px;">
+	</div>
+
+		<div class="mb-4 pt-4 bg-primary-subtle">
+			<ul class="nav nav-tabs justify-content-center"> <!--  th:switch="${user.role}" / th:case="'admin'"-->
+				<li class="nav-item"><a class="nav-link" th:classappend="${activeNavLink} == 'bearbeitung' ? ' active'" th:href="@{/bearbeitung}">Aufgabenblätter</a></li>
+				<li th:if="${loggedUser?.isAdmin()}" class="nav-item"><a class="nav-link" th:classappend="${activeNavLink} == 'aufgabenblatt' ? ' active'" th:href="@{/aufgabenblatt}">Aufgabenblätter (Admin)</a></li>
+				<li th:if="${loggedUser?.isConfig()}" class="nav-item"><a class="nav-link" th:classappend="${activeNavLink} == 'aufgabentyp' ? ' active'" th:href="@{/aufgabentyp}">Aufgabentypen</a></li>
+				<li th:if="${loggedUser?.isConfig()}" class="nav-item"><a class="nav-link" th:classappend="${activeNavLink} == 'aufgabentemplate' ? ' active'" th:href="@{/aufgabentemplate}">Aufgabentemplates</a></li>
+				<li th:if="${loggedUser?.isConfig()}" class="nav-item"><a class="nav-link" th:classappend="${activeNavLink} == 'datentemplate' ? ' active'" th:href="@{/datentemplate}">Datentemplates</a></li>
+				<li th:if="${loggedUser?.isConfig()}" class="nav-item"><a class="nav-link" th:classappend="${activeNavLink} == 'spaltendefinition' ? ' active'" th:href="@{/spaltendefinition}">Spaltendefinitionen</a></li>
+				<li th:if="${loggedUser?.isAdmin()}" class="nav-item"><a class="nav-link" th:classappend="${activeNavLink} == 'protokoll' ? ' active'" th:href="@{/protokoll}">Protokoll</a></li>
+				<li th:if="${loggedUser?.isAdmin()}" class="nav-item"><a class="nav-link" th:classappend="${activeNavLink} == 'user' ? ' active'" th:href="@{/user}">Benutzer</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/datenschutz}">Datenschutz</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/impressum}">Impressum</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a></li>
+			</ul>
+		</div>
+
+		<div class="container" th:insert="${content}">
+
+		</div>
+		
+		<div style="margin-top: 40px; float: left; font-size: 12px; color: #a0a0a0;">
+			<img th:src="@{/images/Logo_Stiftung_Hochschullehre_pos-Gefoerdert-durch.jpg}" style="height: 80px; padding: 0px; margin: 0px; margin-left: 20px;">
+		</div>
+		<div style="margin-top: 40px; float: right; padding: 20px; font-size: 12px; color: #a0a0a0;">
+			<div>
+				IBIX Version <span th:text="${session.ibix_version}"></span>
+			</div>
+		</div>
+	</body>
+</html>

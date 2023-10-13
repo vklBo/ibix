@@ -1,0 +1,23 @@
+{% macro generiereconst(liste) -%}
+        {% for text in liste %}
+'    Const {{ text }} As
+        {% endfor %}
+{%- endmacro %}
+
+{% macro generierevar(liste) -%}
+        {% for text in liste %}
+'    Dim {{ text }} As
+        {% endfor %}
+{%- endmacro %}
+
+{% macro generierestatistikueberschrift(texte) -%}
+        {% for text in texte %}
+'    Sheets(TABELLENBLATT_STATISTIK).Cells({{ loop.index }}, 1) = "{{ text }}"
+        {% endfor %}
+{%- endmacro %}
+
+{% macro generierestatistikausgabe(variablen) -%}
+        {% for text in variablen %}
+'    Sheets(TABELLENBLATT_STATISTIK).Cells({{ loop.index }}, 2) = {{ text }}
+        {% endfor %}
+{%- endmacro %}

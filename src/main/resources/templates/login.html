@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<title>Login</title>
+
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap-icons.css}">
+<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+	<div class="banner">
+		<div>
+			<img th:src="@{/images/kit/IBIX+BO_Task_weiss.svg}"
+				style="height: 160px; float: left; margin-top:-32px; margin-left:20px"
+				src="" alt="IBIX Projektlogo"> 
+			<img th:src="@{/images/hsbo_white.svg}"
+				style="height: 60px; float: right; margin: 8px; margin-right: 20px;"
+				src="" alt="Logo der Hochschule Bochum">
+		</div>
+	</div>
+
+	<div
+		style="width: 400px; margin: auto; border: solid 1px #e0e0e0; padding: 20px; margin-top: 40px;">
+		<div style="text-align: center; font-size: 32px;">IBIX</div>
+		<div style="text-align: center;" th:if="${param.error}">
+			Fehlerhafte Zugangsdaten oder sonstige Serverprobleme</div>
+		<div style="text-align: center;" th:if="${param.logout}">
+			Sie haben sich erfolgreich abgemeldet</div>
+		<form th:action="@{/login}" method="post" action="">
+
+			<table style="margin: auto; margin-top: 20px;">
+				<tr>
+					<td>Login</td>
+					<td><input type="text" name="username" /></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input type="password" name="password" /></td>
+				</tr>
+				<tr>
+					<td colspan="2" style="height: 15px;"></td>
+				</tr>
+				<tr>
+					<td colspan="2" align=center><input type="submit"
+						value="Login!" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div style="display: flex; justify-content: center; margin-top: 80px;">
+			<img th:src="@{/images/Logo_Stiftung_Hochschullehre_pos-Gefoerdert-durch.jpg}" style="height: 130px;">
+		</div>
+</body>
+</html>

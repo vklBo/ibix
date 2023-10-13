@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Neues Datentemplate</title>
+	</head>
+	<body>
+	
+		<div id="content">
+
+			<div class="my-4">
+				<a class="btn btn-secondary" th:href="@{/datentemplate}">
+					<i class="bi-box-arrow-left pe-2"></i>
+					Zurück zur Übersicht
+				</a>
+			</div>
+
+			<div class="my-4">
+				<h1>Neues Datentemplate</h1>
+			</div>
+
+			<div class="my-4">
+
+				<form class="form" action="#" method="post"
+					th:action="@{/datentemplate/new}"
+					th:object="${template}">
+					<p>
+						<label class="form-label" for="name">Name</label> 
+						<input class="form-control" id="name" type="text" th:field="*{name}" />
+					</p>
+					<p>
+						<label class="form-label" for="name">Tags</label> 
+						<input class="form-control" id="name" type="text" size="60" th:field="*{tagString}" />
+					</p>
+					<input class="btn btn-success" type="submit" value="Speichern" />
+				</form>
+
+			</div>
+	
+		</div>
+	</body>
+</html>

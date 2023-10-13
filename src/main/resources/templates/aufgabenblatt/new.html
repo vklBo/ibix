@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Neues Aufgabenblatt</title>
+	</head>
+	<body>
+	
+		<div id="content">
+
+			<div class="my-4">
+				<a class="btn btn-secondary" th:href="@{/aufgabenblatt}">
+					<i class="bi-box-arrow-left pe-2"></i>
+					Zurück zur Übersicht
+				</a>
+			</div>
+
+			<div class="my-4">
+				<h1>Aufgabenblatt</h1>
+			</div>
+
+			<div class="my-4">
+				<form class="form" action="#"
+					th:action="@{/aufgabenblatt/new}"
+					th:object="${aufgabenblatt}" method="post">
+					<p>
+						<label class="form-label" for="nr">Nummer</label>
+						<input class="form-control" id="nr" type="number" th:field="*{nr}" />
+					</p>
+					<p>
+						<label class="form-label" for="name">Name</label>
+						<input class="form-control" id="name" type="text" size="60" th:field="*{name}" />
+					</p>
+					<p>
+						<label class="form-label" for="zusatztext">Zusätzlicher Text</label>
+						<textarea class="form-control" id="zusatztext" rows="3" cols="50" th:field="*{zusatztext}" ></textarea>
+					</p>
+					<div class="form-check form-switch mb-3">
+						<label class="form-check-label" for="inaktiv">Inaktiv</label>
+						<input class="form-check-input" id="inaktiv" type="checkbox" th:field="*{inaktiv}" />
+					</div>
+					<div class="form-check form-switch mb-3">
+						<label class="form-check-label" for="klausur">Prüfung</label>
+						<input class="form-check-input" id="klausur" type="checkbox" th:field="*{klausur}" />
+					</div>
+					<p>
+						<label class="form-label" for="von">Start der Ausgabe</label> 
+						<input class="form-control" id="von" type="datetime-local" size="60" th:field="*{start}" />
+					</p>
+					<p>
+						<label class="form-label" for="bis">Ende der Ausgabe</label> 
+						<input class="form-control" id="bis"type="datetime-local" size="60" th:field="*{ende}" />
+					</p>
+					<p>
+						<label class="form-label" for="dauer">Bearbeitungsdauer</label>
+						<input class="form-control" id="dauer" type="number" th:field="*{dauer}" />
+					</p>
+					<input class="btn btn-success" type="submit" value="Speichern" />
+				</form>
+			</div>
+			
+		</div>
+
+	</body>
+</html>

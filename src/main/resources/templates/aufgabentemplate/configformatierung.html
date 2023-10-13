@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Config: Formatierung</title>
+	</head>
+	<body>
+		<div id="content">
+			
+			<div class="my-4">
+				<a class="btn btn-secondary" th:href="@{/aufgabentemplate/{id}#teilaufgaben(id=${templateId})}">
+					<i class="bi-box-arrow-left pe-2"></i>
+					Zurück zum Aufgabentemplate
+				</a>
+			</div>
+
+			<div class="my-4">
+				<h1>Konfiguration: Formatierung</h1>
+			</div>
+			
+			<div class="my-4">
+				<form class="form" action="#" method="post"
+					th:action="@{/configFormatierung/{id}(id=${templateId})}"
+					th:object="${configFormatierung}">
+					<div class="mb-3">
+						<label class="fw-bold" for="prozedurname">Prozedurname</label>
+						<div class="text-muted">
+							Standard ist "formatieren_click()"
+						</div>
+						<input class="form-control" id="prozedurname" size="50" type="text" th:field="*{prozedurname}" />
+					</div>
+					<div class="mb-3">
+						<label class="fw-bold" for="prozedurname">Einleitender Text für die Aufgabe</label>
+						<textarea class="form-control" id="allgemeinerText" rows="4" cols="50" th:field="*{allgemeinerText}" ></textarea>
+					</div>
+					<div class="mb-3">
+						<label class="fw-bold" for="subtypen">Subtypen</label>
+						<div class="text-muted">
+							In der Form <code>&lbrack;0,1,2&rbrack;</code>
+							<ol class="my-1">
+								<li value="0">Farbe festlegen</li>
+								<li value="1">Sonderfall für die Farbe</li>
+								<li value="2">Schriftart festlegen</li>
+							</ol>
+						</div>
+						<input class="form-control" id="subtypen" size="40" type="text" th:field="*{subtypen}" />
+					</div>
+					<div class="mb-3">
+						<label class="fw-bold" for="spalten">Spalten für Formatierung</label>
+						<div class="text-muted">
+							In der Form <code>[spalte1, spalte2, ...]</code>
+						</div>
+						<input class="form-control" id="spalten" size="60" type="text" th:field="*{spalten}" />
+					</div>
+					<div class="mb-3">
+						<label class="fw-bold" for="bedingungsspalten">Spalten für Bedingungen</label>
+						<div class="text-muted">
+							In der Form <code>[spalte1, spalte2, ...]</code>
+						</div>
+						<input class="form-control" id="bedingungsspalten" size="60" type="text" th:field="*{bedingungsspalten}" />
+					</div>
+					<input class="btn btn-success" type="submit" value="Speichern" />
+				</form>
+			</div>
+
+		</div>
+	</body>
+</html>

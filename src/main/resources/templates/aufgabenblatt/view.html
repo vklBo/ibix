@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Aufgabenblatt</title>
+	</head>
+	<body>
+
+		<div id="content">
+		
+			<div class="my-4">
+				<a class="btn btn-secondary" th:href="@{/aufgabenblatt}">
+					<i class="bi-box-arrow-left pe-2"></i>
+					Zurück zur Übersicht
+				</a>
+			</div>
+			
+			<div class="my-4">
+				<h1>
+					Aufgabenblatt:
+					<span th:text="${aufgabenblatt.name}"></span>
+				</h1>
+			</div>
+
+			<div class="my-4">
+				<form class="form" action="#"
+					th:action="@{/aufgabenblatt/{id}(id=${aufgabenblatt.id})}"
+					th:object="${aufgabenblatt}" method="post">
+					<p>
+						<label class="form-label" for="id">Id</label>
+						<input class="form-control-plaintext" id="id" type="text" th:field="*{id}" readonly />
+					</p>
+					<p>
+						<label class="form-label" for="nr">Nummer</label>
+						<input class="form-control" id="nr" type="number" th:field="*{nr}" />
+					</p>
+					<p>
+						<label class="form-label" for="name">Name</label>
+						<input class="form-control" id="name" type="text" size="60" th:field="*{name}" />
+					</p>
+					<p>
+						<label class="form-label" for="zusatztext">Zusätzlicher Text</label>
+						<textarea class="form-control" id="zusatztext" rows="3" cols="50" th:field="*{zusatztext}" ></textarea>
+					</p>
+					<div class="form-check form-switch mb-3">
+						<label class="form-check-label" for="inaktiv">Inaktiv</label>
+						<input class="form-check-input" id="inaktiv" type="checkbox" th:field="*{inaktiv}" />
+					</div>
+					<div class="form-check form-switch mb-3">
+						<label class="form-check-label" for="klausur">Prüfung</label>
+						<input class="form-check-input" id="klausur" type="checkbox" th:field="*{klausur}" />
+					</div>
+					<p>
+						<label class="form-label" for="von">Start der Ausgabe</label>
+						<input class="form-control" id="von" type="datetime-local" size="60" th:field="*{start}" />
+					</p>
+					<p>
+						<label class="form-label" for="bis">Ende der Ausgabe</label>
+						<input class="form-control" id="bis" type="datetime-local" size="60" th:field="*{ende}" />
+					</p>
+					<p>
+						<label class="form-label" for="dauer">Bearbeitungsdauer</label>
+						<input class="form-control" id="dauer" type="number" th:field="*{dauer}" />
+					</p>
+					<p>
+						<label class="form-label" for="tags">Tags</label> 
+						<input class="form-control" id="tags" type="text" size="60" th:field="*{tagString}" />
+					</p>
+					<p>
+						<input type="submit" value="Speichern" class="btn btn-success" />
+					</p>
+				</form>
+			</div>
+
+			<div class="my-4">
+				<h3 id="aufgabentypen">Aufgabentypen</h3>
+				<table>
+					<tr>
+						<th valign="top">Zugeordet</th>
+						<th valign="top">
+							Alle Typen
+							<form class="form" action="#" method="get" th:action="@{/aufgabenblatt/{id}(id=${aufgabenblatt.id})}">
+								<input class="form-control" id="filtertext" type="text" size=50 th:value="${filtertext}" name="filtertext" />
+								<div class="my-2">
+									<input class="btn btn-primary" type="submit" value="Filtern" />
+									<a class="btn btn-primary" th:href="@{/aufgabenblatt/{id}?filtertext(id=${aufgabenblatt.id})}">Alle anzeigen</a>
+								</div>
+							</form>
+						</th>
+					</tr>
+					<tr valign="top">
+						<td>
+							<table class="table table-striped">
+								<tr>
+									<th>Details</th>
+									<th>Name</th>
+									<th>Lernziel</th>
+									<th>Schwierigkeit</th>
+									<th>Standardaufgabe</th>
+									<th class="text-center">Entfernen</th>
+								</tr>
+			
+								<tr class="align-middle" th:each="aufgabentyp : ${aufgabenblatt.aufgabentypen}">
+									<td>
+										<a th:href="@{/aufgabentyp/{id}(id=${aufgabentyp.id})}">
+											<span th:text="${aufgabentyp.id}"></span>
+										</a>
+									</td>
+									<td><span th:text="${aufgabentyp.name}"></span></td>
+									<td><span th:text="${aufgabentyp.lernziel}"></span></td>
+									<td><span th:text="${aufgabentyp.schwierigkeit}"></span></td>
+									<td><span th:text="${aufgabentyp.standard}"></span>
+									<td class="text-center">
+										<a class="btn btn-sm btn-danger" th:href="@{/aufgabenblatt/{id}/entfernen/{typId}(id=${aufgabenblatt.id},typId=${aufgabentyp.id})}">
+											<i class="bi-x"></i>
+										</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td>
+							<table class="table table-striped">
+								<tr>
+									<th>Id</th>
+									<th>Name</th>
+									<th>Lernziel</th>
+									<th>Schwierigkeit</th>
+									<th>Standardaufgabe</th>
+									<th class="text-center">Auswählen</th>
+								</tr>
+								<tr th:each="aufgabentyp : ${alleAufgabentypen}">
+									<td><span th:text="${aufgabentyp.id}"></span></td>
+									<td><span th:text="${aufgabentyp.name}"></span></td>
+									<td><span th:text="${aufgabentyp.lernziel}"></span></td>
+									<td><span th:text="${aufgabentyp.schwierigkeit}"></span></td>
+									<td><span th:text="${aufgabentyp.standard}"></span></td>
+									<td class="text-center">
+										<a class="btn btn-sm btn-primary" th:href="@{/aufgabenblatt/{id}/zuordnen/{typId}(id=${aufgabenblatt.id},typId=${aufgabentyp.id})}">
+											<i class="bi-check"></i>
+										</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+		</div>
+
+	</body>
+</html>

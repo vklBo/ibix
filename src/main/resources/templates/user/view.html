@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+<head>
+<title>User</title>
+</head>
+<body>
+	<div id="content">
+
+		<div class="my-4">
+			<a class="btn btn-secondary" th:href="@{/user}"> <i
+				class="bi-box-arrow-left pe-2"></i> Zurück zur Übersicht
+			</a>
+		</div>
+
+		<h1 class="my-4">User</h1>
+		<h3>
+			<span th:text="${user.vorname}"></span> <span
+				th:text="${user.nachname}"></span>
+		</h3>
+		
+		<a th:if="${user.username=='dfb60212'}" class="btn btn-primary" th:href="@{/user/loadDetails}">Userdaten vervollständigen</a>
+
+		<form class="form my-4" action="#"
+			th:action="@{/user/{userId}(userId=${user.id})}" th:object="${user}"
+			method="post">
+			<table>
+				<tr>
+					<td>Id:</td>
+					<td><span th:text="*{id}"></span> <input type="hidden" id="id"
+						th:field="*{id}" /></td>
+				</tr>
+				<tr>
+					<td>Username:</td>
+					<td><span th:text="*{username}"></span></td>
+				</tr>
+				<tr>
+					<td>Name:</td>
+					<td><span th:text="*{vorname}"></span> <span
+						th:text="*{nachname}"></span></td>
+				</tr>
+				<tr>
+					<td>Email:</td>
+					<td><span th:text="*{email}"></span></td>
+				</tr>
+				<tr>
+					<td>Matrikelnummer:</td>
+					<td><span th:text="*{matrikelnummer}"></span></td>
+				</tr>
+				<tr>
+					<td>Hashcode:</td>
+					<td><span th:text="*{hashcode}"></span></td>
+				</tr>
+				<tr>
+					<td>Letzter Login:</td>
+					<td><span
+						th:text="${#temporals.format(user.lastlogin, 'dd.MM.yyyy HH:mm:ss')}"></span>
+					</td>
+				</tr>
+				<tr>
+					<td><label class="form-label" for="schreibverlaengerung">Schreibverlaengerung
+							(in Prozent):</label></td>
+					<td><input class="form-control" id="schreibverlaengerung"
+						type="number" th:field="*{schreibverlaengerung}" /></td>
+				</tr>
+				<tr>
+					<td><input class="btn btn-success" type="submit"
+						value="Speichern" /></td>
+				</tr>
+
+			</table>
+		</form>
+
+	</div>
+</body>
+</html>

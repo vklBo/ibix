@@ -1,0 +1,8 @@
+<h2> Aufgabe: {{ aufgabenname }} - Benutzerdefinierte Funktion </h2>
+{% include "aufgabe1/" + aufgabennummer + ".jinja" %}
+
+Der Aufruf der Funktion zur Berechnung der letzten Tabellenspalte erfolgt mit
+
+{{ funktionsaufruf }}
+
+{{ my.generieretabelle(tabelle, spaltentitel) }}

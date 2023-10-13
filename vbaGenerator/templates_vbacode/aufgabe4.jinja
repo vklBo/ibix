@@ -1,0 +1,40 @@
+Sub formatieren_Click()
+{{ my.generiereconst(konstanten_aufgabe4) }}
+'    Const ERSTE_ZEILE_MIT_INFORMATIONEN As
+'    Const TABELLENBLATT As
+'
+'    Dim i As Long
+'    Dim j As Long
+'    Dim letzteBesetzteZeile As Long
+'    Dim letzteBesetzteSpalte As Long
+'    Dim farbe As Long
+'    Dim fett As Boolean
+'    Dim kursiv As Boolean
+
+    
+    
+    
+End Sub
+
+
+' Kein Bestandteil der Prüfung
+Sub entformatieren_Click()
+    Const SPALTE As Long = 2
+
+    Const ERSTE_ZEILE_MIT_INFORMATIONEN As Long = 2
+    Const TABELLENBLATT As Long = 1
+    Dim letzteBesetzteZeile As Long
+    Dim letzteBesetzteSpalte As Long
+    Dim i As Long
+    Dim j As Long
+    letzteBesetzteZeile = ermittleLetzteBesetzteZeileInSpalte(SPALTE, ERSTE_ZEILE_MIT_INFORMATIONEN, TABELLENBLATT)
+    letzteBesetzteSpalte = ermittleLetzteBesetzteSpalteInZeile(ERSTE_ZEILE_MIT_INFORMATIONEN - 1, SPALTE, TABELLENBLATT)
+    For i = ERSTE_ZEILE_MIT_INFORMATIONEN To letzteBesetzteZeile
+        For j = 1 To letzteBesetzteSpalte
+            Sheets(TABELLENBLATT).Cells(i, j).Font.Color = vbBlack
+            Sheets(TABELLENBLATT).Cells(i, j).Interior.Color = xlNone
+            Sheets(TABELLENBLATT).Cells(i, j).Font.Italic = False
+            Sheets(TABELLENBLATT).Cells(i, j).Font.Bold = False
+        Next j
+    Next i
+End Sub

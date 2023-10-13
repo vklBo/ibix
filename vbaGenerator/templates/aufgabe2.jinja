@@ -1,0 +1,25 @@
+<h2> Aufgabe: {{ aufgabenname }} - Statistiken </h2>
+
+{% if statistiktext %}
+<h4> {{ statistiktext }} </h4>
+{% endif %}
+
+Programmieren Sie eine Prozedur "{{ statistikprozedurname }}()", mit der Sie Statistiken berechnen.
+
+Für die unten dargestellte Tabelle
+
+{{ my.generieretabelle(tabelle, spaltentitel) }}
+
+berechnen Sie folgende Statistiken:
+
+{{ my.generierestatistikausgabe(statistikaufaufgaben) }}
+
+Die Werte, die Sie berechnen und darstellen sollen, können
+Sie obiger Abbildung entnehmen. In der Darstellung sind die Ausgaben gerundet, dies ist in Ihrer Lösung
+nicht erforderlich.
+
+
+Die Statistiken werden in Tabellenblatt 2 geschrieben, beginnen Sie in der ersten
+Zeile und schreiben Sie die Bezeichnungen in die erste Spalte und die berechneten Werte in die zweite Spalte.
+Verwenden Sie Funktionen für die Berechnung der letzten Zeile, von Maxima, Minima und bei Divisionen, bei denen der
+Nenner 0 werden kann. Ihre Lösung soll auch funktionieren, wenn der Button nicht auf Tabellenblatt 1 liegt.

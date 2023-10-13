@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+<head>
+<title>Protokoll</title>
+</head>
+<body>
+
+	<div id="content">
+
+		<div class="my-4">
+			<a class="btn btn-secondary" th:href="@{/protokoll}"> <i
+				class="bi-box-arrow-left pe-2"></i> Zurück zur Übersicht
+			</a>
+		</div>
+
+		<div class="my-4">
+			<h1>Protokoll</h1>
+		</div>
+
+		<div class="my-4">
+			<table>
+				<tr>
+					<td valign=top>Userhash</td>
+					<td><span th:text="${protokoll.benutzerHash}"></span></td>
+				</tr>
+				<tr>
+					<td valign=top>Aktion</td>
+					<td><span th:text="${protokoll.aktion}"></span></td>
+				</tr>
+				<tr>
+					<td valign=top>Zeitstempel</td>
+					<td><span
+						th:text="${#temporals.format(protokoll.timestamp, 'dd.MM.yyyy HH:mm:ss')}"></span></td>
+				</tr>
+				<tr>
+					<td>AufgabenID</td>
+					<td><span th:text="${protokoll.aufgabe?.id}"></span> / Generator:
+					<span th:text="${protokoll.aufgabe?.generatorAufgabenID}"></span> </td>
+				</tr>
+				<tr>
+					<td>BearbeitungID</td>
+					<td><span th:text="${protokoll.bearbeitung?.id}"></span></td>
+				</tr>
+				<tr>
+					<td>HinweisID</td>
+					<td><span th:text="${protokoll.hinweis?.id}"></span></td>
+				</tr>
+				<tr>
+					<td valign=top>Prozent</td>
+					<td><span th:text="${protokoll.bewertung}"></span></td>
+				</tr>
+				<tr>
+					<td valign=top>Bewertungstext</td>
+					<td><pre>
+<code th:text="${#strings.abbreviate(protokoll.bewertungsText, 10000)}"></code>
+						</pre></td>
+				</tr>
+				<tr>
+					<td valign=top>VBACode</td>
+					<td><pre>
+<code th:text="${#strings.abbreviate(protokoll.vbaCode, 10000)}"></code>
+						</pre></td>
+				</tr>
+				<tr>
+					<td valign=top>PythonCode</td>
+					<td><pre>
+<code th:text="${#strings.abbreviate(protokoll.pythonCode, 10000)}"></code>
+						</pre></td>
+				</tr>
+
+			</table>
+		</div>
+
+	</div>
+
+</body>
+</html>

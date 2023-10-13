@@ -1,0 +1,270 @@
+Option Explicit
+
+Function bestimmeFarbe(preis As Double, nacht As String) As Long
+Dim farbe As Long
+
+Const GRENZE_1 As Double = 107.91
+Const GRENZE_2 As Double = 180.31
+ 
+ If preis <= GRENZE_1 Then
+  farbe = vbBlue
+ ElseIf preis <= GRENZE_2 Then
+  farbe = RGB(255, 165, 0)
+ Else
+ farbe = RGB(255, 0, 255)
+End If
+
+If nacht = "" Then
+ farbe = vbBlue
+End If
+
+bestimmeFarbe = farbe
+
+
+End Function
+ Function schreibeFett(zeit As Long) As Boolean
+ 
+If zeit >= 30 Then
+ schreibeFett = True
+Else
+ schreibeFett = False
+End If
+
+ End Function
+ 
+
+Option Explicit
+
+Sub formatieren_click()
+
+Const ZEIT_SPALTE = 2
+Const NACHT_SPALTE = 4
+Const PREIS_SPALTE = 5
+
+Const ERSTE_ZEILE_MIT_INFORMATIONEN As Long = 2
+Const TABELLENBLATT = 1
+
+Dim i As Long
+Dim j As Long
+Dim letzteBesetzteZeile As Long
+Dim letzteBesetzteSpalte As Long
+
+
+
+Dim farbe As Long
+Dim kursiv As Boolean
+
+
+Dim zeit As Long
+Dim nacht As String
+Dim preis As Double
+
+
+letzteBesetzteZeile = ermittleLetzteBesetzteZeileInSpalte(PREIS_SPALTE, ERSTE_ZEILE_MIT_INFORMATIONEN, TABELLENBLATT)
+letzteBesetzteSpalte = ermittleLetzteBesetzteSpalteInZeile(ERSTE_ZEILE_MIT_INFORMATIONEN - 1, PREIS_SPALTE, TABELLENBLATT)
+
+For i = ERSTE_ZEILE_MIT_INFORMATIONEN To letzteBesetzteZeile
+ zeit = Sheets(TABELLENBLATT).Cells(i, ZEIT_SPALTE)
+ nacht = Sheets(TABELLENBLATT).Cells(i, NACHT_SPALTE)
+ preis = Sheets(TABELLENBLATT).Cells(i, PREIS_SPALTE)
+ 
+ farbe = bestimmeFarbe(preis, nacht)
+ kursiv = schreibeFett(zeit)
+ 
+For j = 1 To letzteBesetzteSpalte
+ Sheets(TABELLENBLATT).Cells(i, j).Interior.Color = farbe
+ Sheets(TABELLENBLATT).Cells(i, j).Font.Italic = kursiv
+ Next j
+Next i
+
+End Sub
+
+
+'
+'
+' Hier finden Sie die vorgegebenen Funktionen, die Sie für Ihre Lösung nutzen können
+' Hier keine eigenen Funktionen oder Prozduren hinzufügen
+'
+'
+
+Function ermittleLetzteBesetzteZeileInSpalte(spaltennummer As Long, startzeile As Long, tabellennummer As Long) As Long
+    Dim zeilenzaehler As Long
+    zeilenzaehler = startzeile
+    Do While Not IsEmpty(Sheets(tabellennummer).Cells(zeilenzaehler, spaltennummer))
+        zeilenzaehler = zeilenzaehler + 1
+    Loop
+    ermittleLetzteBesetzteZeileInSpalte = zeilenzaehler - 1
+End Function
+Function ermittleLetzteBesetzteSpalteInZeile(zeilennnummer As Long, startspalte As Long, tabellennummer As Long) As Long
+    Dim spaltenzaehler As Long
+    spaltenzaehler = startspalte
+    Do While Not IsEmpty(Sheets(tabellennummer).Cells(zeilennnummer, spaltenzaehler))
+        spaltenzaehler = spaltenzaehler + 1
+    Loop
+    ermittleLetzteBesetzteSpalteInZeile = spaltenzaehler - 1
+End Function
+
+
+Sub schreibeNeuenFehlerInArray(fehlerString As String, fehlerArray() As String)
+  Dim laengeFehlerArray As Long
+  laengeFehlerArray = UBound(fehlerArray)
+  fehlerArray(laengeFehlerArray) = fehlerString
+  ReDim Preserve fehlerArray(laengeFehlerArray + 1)
+End Sub
+
+Sub schreibeFehlerArray(fehlerArray() As String, tabellennummer As Long, _
+                                            startzeile As Long, SPALTE As Long)
+    Dim laengeFehlerArray As Long
+    Dim i As Long
+    laengeFehlerArray = UBound(fehlerArray)
+    For i = 0 To laengeFehlerArray
+      Sheets(tabellennummer).Cells(startzeile + i, SPALTE) = fehlerArray(i)
+    Next i
+End Sub
+
+Function istPositiveZahl(testwert As String) As Boolean
+    Dim testwertAlsDouble As Double
+    If Not IsNumeric(testwert) Then
+        istPositiveZahl = False
+        Exit Function
+    End If
+    testwertAlsDouble = CDbl(testwert)
+    If (testwertAlsDouble <= 0) Then
+        istPositiveZahl = False
+        Exit Function
+    End If
+    istPositiveZahl = True
+End Function
+Function istPositiveZahlOderNull(testwert As String) As Boolean
+    Dim testwertAlsDouble As Double
+    If Not IsNumeric(testwert) Then
+        istPositiveZahlOderNull = False
+        Exit Function
+    End If
+    testwertAlsDouble = CDbl(testwert)
+    If (testwertAlsDouble < 0) Then
+        istPositiveZahlOderNull = False
+        Exit Function
+    End If
+    istPositiveZahlOderNull = True
+End Function
+Function istGroesserGleichGrenzeLong(testwert As Long, grenze As Long) As Boolean
+    If testwert >= grenze Then
+        istGroesserGleichGrenzeLong = True
+    Else
+        istGroesserGleichGrenzeLong = False
+    End If
+End Function
+
+Function istGroesserGleichGrenzeDouble(testwert As Double, grenze As Double) As Boolean
+    If testwert >= grenze Then
+        istGroesserGleichGrenzeDouble = True
+    Else
+        istGroesserGleichGrenzeDouble = False
+    End If
+End Function
+Function istGroesserGrenzeLong(testwert As Long, grenze As Long) As Boolean
+    If testwert > grenze Then
+        istGroesserGrenzeLong = True
+    Else
+        istGroesserGrenzeLong = False
+    End If
+End Function
+Function istGroesserGrenzeDouble(testwert As Double, grenze As Double) As Boolean
+    If testwert > grenze Then
+        istGroesserGrenzeDouble = True
+    Else
+        istGroesserGrenzeDouble = False
+    End If
+End Function
+Function istKleinerGleichGrenzeLong(testwert As Long, grenze As Long) As Boolean
+    If testwert <= grenze Then
+        istKleinerGleichGrenzeLong = True
+    Else
+        istKleinerGleichGrenzeLong = False
+    End If
+End Function
+Function istKleinerGleichGrenzeDouble(testwert As Double, grenze As Double) As Boolean
+    If testwert <= grenze Then
+        istKleinerGleichGrenzeDouble = True
+    Else
+        istKleinerGleichGrenzeDouble = False
+    End If
+End Function
+Function istKleinerGrenzeLong(testwert As Long, grenze As Long) As Boolean
+    If testwert < grenze Then
+        istKleinerGrenzeLong = True
+    Else
+        istKleinerGrenzeLong = False
+    End If
+End Function
+Function istKleinerGrenzeDouble(testwert As Double, grenze As Double) As Boolean
+    If testwert < grenze Then
+        istKleinerGrenzeDouble = True
+    Else
+        istKleinerGrenzeDouble = False
+    End If
+End Function
+Function liegtZwischenGrenzenDouble(testwert As Double, min As Double, max As Double) As Boolean
+    If testwert >= min And testwert <= max Then
+        liegtZwischenGrenzenDouble = True
+    Else
+        liegtZwischenGrenzenDouble = False
+    End If
+End Function
+Function liegtZwischenGrenzenLong(testwert As Long, min As Long, max As Long) As Boolean
+    If testwert >= min And testwert <= max Then
+        liegtZwischenGrenzenLong = True
+    Else
+        liegtZwischenGrenzenLong = False
+    End If
+End Function
+Function bestimmeMaximumDouble(wert1 As Double, wert2 As Double) As Double
+    If wert1 >= wert2 Then
+        bestimmeMaximumDouble = wert1
+    Else
+        bestimmeMaximumDouble = wert2
+    End If
+End Function
+Function bestimmeMaximumLong(wert1 As Long, wert2 As Long) As Long
+    If wert1 >= wert2 Then
+        bestimmeMaximumLong = wert1
+    Else
+        bestimmeMaximumLong = wert2
+    End If
+End Function
+
+Function bestimmeMinimumDouble(wert1 As Double, wert2 As Double) As Double
+    If wert1 <= wert2 Then
+        bestimmeMinimumDouble = wert1
+    Else
+        bestimmeMinimumDouble = wert2
+    End If
+End Function
+
+Function bestimmeMinimumLong(wert1 As Long, wert2 As Long) As Long
+    If wert1 <= wert2 Then
+        bestimmeMinimumLong = wert1
+    Else
+        bestimmeMinimumLong = wert2
+    End If
+End Function
+
+Function dividiereMitErgebnis0FuerNenner0Double(zaehler As Double, nenner As Long) As Double
+    If nenner <> 0 Then
+        dividiereMitErgebnis0FuerNenner0Double = zaehler / nenner
+    Else
+        dividiereMitErgebnis0FuerNenner0Double = 0
+    End If
+End Function
+Function dividiereMitErgebnis0FuerNenner0Long(zaehler As Long, nenner As Long) As Double
+    If nenner <> 0 Then
+        dividiereMitErgebnis0FuerNenner0Long = zaehler / nenner
+    Else
+        dividiereMitErgebnis0FuerNenner0Long = 0
+    End If
+End Function
+
+
+
+

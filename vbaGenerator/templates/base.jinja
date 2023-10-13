@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% import 'macros.jinja' as my %}
+<html lang="de">
+<head>
+    <style>
+        html {
+            
+        }
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 3px 5px;
+            border: thin dotted silver;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>{% block title %} Aufgabe: {{ aufgabenname }} {% endblock %}</title>
+</head>
+<body>
+    {% if nurTabelle %}
+        {% include "tabelle.jinja" %}
+    {% endif %}
+
+    {% if aufgabe1 %}
+        {% include "aufgabe1.jinja" %}
+    {% endif %}
+
+    {% if aufgabe2 %}
+        {% include "aufgabe2.jinja" %}
+    {% endif %}
+
+    {% if aufgabe3 %}
+        {% include "aufgabe3.jinja" %}
+    {% endif %}
+
+    {% if aufgabe4 %}
+        {% include "aufgabe4.jinja" %}
+    {% endif %}
+</body>
+</html>
+

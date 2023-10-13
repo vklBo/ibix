@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>Datentemplate - Spalte</title>
+	</head>
+	<body>
+		<div id="content">
+			
+			<div class="my-4">
+				<a class="btn btn-secondary" th:href="@{/datentemplate/{templateId}#auswaehlen(templateId=${templateId})}">
+					<i class="bi-box-arrow-left pe-2"></i>
+					Zurück zum Template
+				</a>
+			</div>
+			
+			<div class="my-4">
+				<h1>Datentemplate - Spalten - Zuordnung</h1>
+				<form class="form" action="#"
+					th:action="@{/datentemplate/{templateId}/bearbeiten/{templateSpalteId}(templateId=${templateId},templateSpalteId=${templateSpalte.id})}"
+					th:object="${templateSpalte}" method="post">
+					<p>
+						<label class="form-label" for="id">Id</label>
+						<input class="form-control-plaintext" id="id" type="text" th:field="*{id}" readonly />
+					</p>
+					<p>
+						<label class="form-label" for="ordnung">Ordnung</label>
+						<input class="form-control" id="ordnung" type="number" th:field="*{ordnung}" />
+					</p>
+								
+					<p>
+						<label class="form-label" for="spaltennr">Spaltennummer</label>
+						<input class="form-control" id="spaltennr" type="number" th:field="*{spaltennr}" />
+					</p>
+					<input class="btn btn-success" type="submit" value="Speichern" />
+				</form>
+			</div>
+
+		</div>
+	</body>
+</html>

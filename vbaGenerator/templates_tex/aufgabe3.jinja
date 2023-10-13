@@ -1,0 +1,42 @@
+{% if klausur %}
+    \aufgabe{Aufgabe 3 (VBA 20 Punkte)}
+{% else %}
+    \subsection*{Aufgabe: {{ aufgabenname }} -- Plausibilitätsprüfungen }
+{% endif %}
+
+{% if plausitext %}
+\emph{ {{ plausitext }} }
+{% endif %}
+
+Programmieren Sie eine Prozedur ''\verb+{{ plausiprozedurname }}()+'', mit der Sie die Daten Ihrer Tabelle auf Plausibilität prüfen.
+
+Folgende Plausibilitätsprüfungen sollen durchgeführt werden:
+
+{{ my.generieretextliste(plausiaufgaben) }}
+
+Falls ein Verstoß gegen die Plausibilitäten vorliegt, geben Sie in einem Nachrichtenfenster einen Hinweis darauf aus,
+ansonsten zeigen Sie ein Nachrichtenfenster mit dem Hinweis, dass alles in Ordnung ist.
+
+Sie erzeugen für die folgende Tabelle aus Tabellenblatt~1
+
+{{ my.generieretabelle(tabelleMitFehlern, spaltentitel) }}
+
+beispielweise das nachfolgende Fehlerprotokoll in Tabellenblatt~3:
+
+{{ my.generierefehlerausgabe(fehlertexte, ausgabezeile, ausgabespalte) }}
+
+
+{% if klausur %}
+Beachten Sie folgende Randbedingungen:
+\begin{itemize}
+\item Für \emph{alle} Plausibilitätsprüfungen sowie für die Berechnung der letzten Zeile verwenden Sie Funktionen aus dem Modul Standardfunktionen sofern sie vorhanden sind!
+\item Die aufgetretenen Verstöße gegen die Plausibilitäten werden zunächst auf ein Fehlerarray geschrieben und dann
+insgesamt ausgegeben. Dazu verwenden Sie jeweils Prozeduren aus dem Modul Standardfunktionen (also eine zum Besetzen des
+Fehlerarrays und eine für die Ausgabe).
+\item Die Position der Fehlerausgabe entnehmen Sie der Abbildung mit dem Fehlerprotokoll.
+\end{itemize}
+{% else %}
+Die Position der Fehlerausgabe entnehmen Sie der Abbildung mit dem Fehlerprotokoll.
+{% endif %}
+
+

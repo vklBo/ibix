@@ -1,0 +1,52 @@
+Aufruf:
+main.py laufen lassen als Python-Programm (startet Webserver)
+http://127.0.0.1:5000/read/??  (liest die konkrete/generierte Aufgabe mit der id ?? aus der Datenbank
+http://127.0.0.1:5000/create/??/1234 (erzeugt eine neue Aufgabe zum Template ??, 1-4 gibt den Typ an), gibt eine konkrete ID zurück
+http://127.0.0.1:5000/bewerte/?? (bewertet Aufgabe mit der id ??, der VBA-Code muss im POST-Request als vbacode übergeben werden)
+http://127.0.0.1:5000/loadexcel/?? (liefert die Excel-Datei der Aufgabe id)
+
+
+
+
+
+Aufgabenkonfiguration:
+Tabelle "aufgabe": Name und ID der Aufgabe
+Tabelle "aufgabeSpalte": Verbindungstabelle, um allgemeine Spalten (wie Kundennamen) der Tabelle zuzuordnen (ordnung kennzeichnet die Position der Spalte in der Tabelle)
+Tabelle "spalte": Beschreibung der Spalten einer Exceltabelle (Detail folgen unten)
+Tabelle "aufgabeConfig": Konfigurationsinformationen für jeden Aufgaben und jeden Aufgabentypen
+
+Tabelle "spalte"
+id: Primärschlüssel der Spalte
+ordnung: Nummer der Spalte in der Exceltabelle (0: gobaler Rechenwert für die Aufgabe)
+            Werden die Spalten berechnet, erfolgt dies in der Reihenfolge der ordnung
+spaltennr: Die Spalte wird entsprechend der Nummer in der Tabelle angezeigt
+aufgabe_id: Aufgabe, zu der die Spalte gehört
+titel: Überschrift der Spalte in der Excel-Tabelle
+name: interner Name für Bezüge, daraus werden aber auch Variablen- und Konstantennamen generiert
+typ:
+    zahl: das System generiert eine Zahl im vorgegenen Intervall
+    text: das System generiert einen Text aus der vorgebenen Auswahl
+    berechnet: das System wendet den Rechenausdruck aus "wert" an
+    bestimmt: das System bestimmt anhand der Spalte "wert" einen aus den Intervallen vorgegebenen Wert (immer eine Zahl)
+auswahl:
+    x: die Texte des Feldes werden alle für eine Textauswahl verwendet
+    n (n eine Zahl): für einen Zahlenfeld werden n zufällige Intervalle für eine Auswahl gebildet
+    Liste:  bei einem Textfeld wird für die Elemente der Liste eine Auswahl gebildet, sowie für "Sonstige"
+            bei einem Zahlenfeld werden die Elemente der Liste für eine Auswahl verwendet (operator <=)
+wert: Werte, mit denen die Spalte gefüllt werden sollen
+intervalle: ein oder mehrere Intervalle, mit den die Wertebereiche der Spalte festgelegt werden
+config: beliebige weitere Konfiguration, z.B. das Ausgabeformat für die Spalte (wenn es sich nicht aus den Intervallen ergibt)
+
+Die Spalteninformation werden wie folgt ausgewertet:
+Vorab:
+alle Zahlenwerte, die global sind (Ordnung==0) Zufallswert bestimmen
+für alle Spalten, die Auswahldaten beinhalten (Spalte auswahl gefüllt) die Bedingungen festlegen
+für alle Spalten, die für Auswahlen Zieldaten beinhalten (typ==bestimmt) diese festlegen (global)
+
+Für alle Zeilen der Tabelle:
+    Für alle Spalten ausser Ordnung == 0 mit Ordnung von unten aufsteigend:
+        zahl oder text: zufälligen Zahlen- und Textwerte bestimmen
+        berechnet: Rechenausdruck ausführen
+        bestimmt: Zielwert mit Hilfe der Auswahlbedingung der abhängigen Spalte ausführen
+
+

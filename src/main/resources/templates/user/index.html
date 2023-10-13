@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:replace="~{ layout :: header(~{::title}, ~{::#content}) }">
+	<head>
+		<title>User</title>
+	</head>
+	<body>
+		<div id="content">
+
+			<h1 class="my-4">User</h1>
+			
+			<div class="my-4">
+				<form class="form" action="#" th:action="@{/user}" method="get">
+					<input class="form-control" id="filtertext" type="text" size=30 th:value="${filtertext}" name="filtertext" />
+					<div class="mt-2">
+						<input class="btn btn-primary" type="submit" value="Filtern" />
+						<a class="btn btn-primary" th:href="@{/user?filtertext}">Alle anzeigen</a>
+					</div>
+				</form>
+			</div>
+			
+			<table class="table table-striped my-4">
+				<tr>
+					<th>Id</th>
+					<th>Username</th>
+					<th>Name</th>
+					<th>Hashcode</th>
+					<th>Letzter Login</th>
+					<!-- 
+					<th>Datenschutz bestätigt</th>
+					 -->
+					<th>Schreibverlängerung (%)</th>
+					<th class="text-center">Bearbeiten</th>
+				</tr>
+				<tr class="align-middle" th:each="user : ${userlist}">
+					<td><span th:text="${user.id}"></span></td>
+					<td><span th:text="${user.username}"></span></td>
+					<td><span th:text="${user.vorname}"></span> <span th:text="${user.nachname}"></span></td>
+					<td><span th:text="${user.hashcode}"></span></td>
+					<td><span th:text="${#temporals.format(user.lastlogin, 'dd.MM.yyyy HH:mm:ss')}"></span> (<span th:text="${user.semesterLogin}"></span>)</td>
+					<!-- 
+					<td><span th:text="${user.datenschutzZugestimmt}"></span></td>					
+					 -->
+					<td><span th:text="${user.schreibverlaengerung}"></span></td>					
+					<td class="text-center">
+						<a class="btn btn-warning" th:href="@{/user/{id}(id=${user.id})}">
+							<i class="bi-pencil"></i>
+						</a>
+					</td>
+				</tr>
+			</table>
+
+		</div>
+	</body>
+</html>

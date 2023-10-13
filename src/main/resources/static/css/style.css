@@ -1,0 +1,9 @@
+.banner {
+  background-color: #e2001a;
+  height: 100px;
+  padding: 10px;
+}
+
+.bg-primary-subtle {
+  background-color: #d0d0d0!important;
+}
