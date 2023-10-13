@@ -73,7 +73,7 @@ File: src/main/resourcesapplication-prod.properties
 File: vbaGenerator/helper/db_helper.py
 ```
 
--- Start Python-Application
+- Start Python-Application
 
 In directory "vbaGenerator":
 
@@ -81,7 +81,7 @@ In directory "vbaGenerator":
 python3 main.py
 ```
 
--- Start Java-Application
+- Start Java-Application
 
 In den root directory:
 
