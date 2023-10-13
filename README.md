@@ -13,7 +13,7 @@ Funded by "Stiftung Innovation in der Hochschullehre"
 
 ## Adaptation to own environment
 
-The credential check at login and the retrieval of user data from the Ldap based on the environment at the University of Bochum. The corresponding source code must be adapted to your own environment.
+The credential check at login and the retrieval of user data from the Ldap bases on the environment at the University of Bochum. The corresponding source code must be adapted to your own environment.
 
 Classes:
 - de.hsbo.ibix.security.LdapAuthenticationProvider
